@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/my2018?characterEncoding=utf8&useSSL=false
+    username: root
+    password: 690818
+    test-while-idle: true
+    validation-query: SELECT 1
+
+  thymeleaf:
+    mode: LEGACYHTML5
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+server:
+  port: 8080
+app:
+  jwt:
+  header: token
+  tokenHead: ttttt
+  expire: 5184000
+  secret: aHR0cHM6Ly9teS5vc2NoaW5hLm5ldC91LzM2ODE4Njg=
+
+jwt:
+  header: Authorization
+  secret: mySecret
+  expiration: 604800
+  tokenHead: "Bearer "
+  route:
+    authentication:
+      path: auth
+      refresh: refresh
+      register: "auth/register"
+
+

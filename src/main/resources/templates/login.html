@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+	  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<meta charset="UTF-8">
+	<title>登陆</title>
+	<link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+<div class="bgpic">
+	<div class="backfiler">
+		<div class="loginBG">
+			<div class="loginFiler">
+				<div class="left">
+					<h1>WHAT IS LOVE ?</h1>
+				</div>
+				<div class="right">
+					<h1>登录</h1>
+					<h4 class="msg" th:if="${param.error}" >用户名或密码错误</h4>
+                   <!-- <h4 class="msg" th:if="${param.logout}" >退出成功,欢迎再次使用</h4> -->
+                    <h4 class="msg" th:if="${regss}" th:text="${regss}"></h4>
+					<form th:action="@{/login}" method="post">
+						<label for="name">用户名：</label><br>
+						<input name="username" id="name" class="inputText"><br>
+						<label for="passwd">密码：</label><br>
+						<input name="password" type="password" id="passwd" class="inputText"><br>
+						<button class="loginBtn">登录</button>
+                        <a href="register" class="registerBtn">注册</a>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
