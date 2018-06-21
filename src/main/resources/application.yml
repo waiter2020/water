@@ -38,4 +38,15 @@ jwt:
       refresh: refresh
       register: "auth/register"
 
+tcp:
+  port: 5432
+boss:
+  thread:
+    count: 2
+worker:
+  thread:
+    count: 2
+so:
+  keepalive:  true
+  backlog: 100
 

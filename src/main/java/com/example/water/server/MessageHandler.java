@@ -15,10 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-/**
- * Created by  waiter on 18-6-18.
- * @author waiter
- */
 public class MessageHandler {
 	
 	private static MessageHandler msgHandler = new MessageHandler();;

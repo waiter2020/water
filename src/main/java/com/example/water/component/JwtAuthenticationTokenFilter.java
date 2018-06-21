@@ -40,13 +40,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
-    @Value("${jwt.route.authentication.path}")
-    private String fPath;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        String s= request.getRequestURI();
-        if(s.contains(fPath)) {
+
+
             System.out.println("进来了 JwtAuthenticationTokenFilter");
 
             // 得到 请求头的 认证信息 authToken
@@ -72,7 +70,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 }
             }
             System.out.println("出去了 JwtAuthenticationTokenFilter");
-        }
+
         chain.doFilter(request, response);
 
     }

@@ -6,9 +6,9 @@ Configuration:
       #测试：-Dlog.level.console=warn -Dlog.level.xjj=trace
       #生产：-Dlog.level.console=warn -Dlog.level.xjj=info
       - name: log.level.console
-        value: trace
+        value: warn
       - name: log.level.com
-        value: trace
+        value: info
       - name: log.path
         value: /opt/logs
       - name: project.name
