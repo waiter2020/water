@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
+
 /**
  * Created by  waiter on 18-6-18.
  * @author waiter
@@ -37,5 +39,9 @@ public class UserService implements UserDetailsService {
         }
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPasswd(),user.getAuthorities());
+    }
+
+    public LinkedList<User> findAllByFamily_Id(int id){
+        return userDao.findAllByFamily_Id(id);
     }
 }

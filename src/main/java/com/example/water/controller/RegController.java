@@ -54,7 +54,7 @@ public class RegController {
             //添加权限
             roles.add(new Role("USER"));
             //保存用户，对密码加密
-            userService.add(new User(username, email, phone, bCryptPasswordEncoder.encode(passwd), true,roles));
+            userService.add(new User(username, phone,email, bCryptPasswordEncoder.encode(passwd), true,roles));
         }catch (Exception e){
 
             model.addAttribute("regerror",e.getCause()+",注册失败");

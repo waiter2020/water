@@ -3,6 +3,8 @@ package com.example.water.dao;
 import com.example.water.model.User;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.LinkedList;
+
 
 /**
  * Created by  waiter on 18-6-18.
@@ -15,4 +17,11 @@ public interface UserDao extends CrudRepository<User,Integer> {
      * @return
      */
     public User findByUsername(String userName);
+
+    /**
+     * 通过家庭id查找所有成员
+     * @param id
+     * @return
+     */
+    public LinkedList<User> findAllByFamily_Id(int id);
 }

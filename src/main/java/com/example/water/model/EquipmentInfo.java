@@ -3,10 +3,7 @@ package com.example.water.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by  waiter on 18-6-18.
@@ -14,6 +11,7 @@ import javax.persistence.Id;
  */
 @Entity
 @Data
+@Table(name = "equipment_info")
 public class EquipmentInfo {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +21,11 @@ public class EquipmentInfo {
 	private double locLatitude;
 	private int waterUsage;
 	private int equipState;
-	
+	/**
+	 * 标明此表属于哪个家庭
+	 */
+	@ManyToOne
+	private Family family;
 	public EquipmentInfo() {
 		super();
 		// TODO Auto-generated constructor stub

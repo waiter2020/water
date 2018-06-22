@@ -109,7 +109,7 @@ h4{
 }
 
 
-form>.registerBtn{
+#registerBtn{
     font-family: "Microsoft YaHei UI Light";
     margin:20px;
     width:100px;
@@ -124,7 +124,7 @@ form>.registerBtn{
     transition: background,box-shadow .35s,.35s;
 
 }
-form>.registerBtn:hover{
+#registerBtn:hover{
     background: purple;
     box-shadow: purple 1px 1px 15px;
 }

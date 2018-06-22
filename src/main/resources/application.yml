@@ -19,7 +19,7 @@ spring:
   jackson:
       date-format: yyyy-MM-dd HH:mm:ss
 server:
-  port: 8080
+  port: 8081
 app:
   jwt:
   header: token
@@ -39,7 +39,7 @@ jwt:
       register: "auth/register"
 
 tcp:
-  port: 5432
+  port: 5433
 boss:
   thread:
     count: 2

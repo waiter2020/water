@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 
@@ -23,10 +24,23 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String email;
     private String passwd;
+    /**
+     *     生日
+     */
+    private Date birth;
     private boolean enabled;
-
+    /**
+     * 标明是哪个家庭
+     */
+    @ManyToOne
+    private Family family;
+    /**
+     * 权限列表
+     */
     @OneToMany(targetEntity = Role.class,cascade=CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Role> authorities ;
+
+
     User(){}
 
     public User(String username,String email,String phoneNumber, String passwd, boolean enabled) {

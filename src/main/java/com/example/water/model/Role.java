@@ -19,6 +19,10 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id ;
+    /**
+     * 用户权限
+     *
+     */
     private String role;
     Role(){}
 
