@@ -44,4 +44,8 @@ public class UserService implements UserDetailsService {
     public LinkedList<User> findAllByFamily_Id(int id){
         return userDao.findAllByFamily_Id(id);
     }
+
+    public User findById(int id){
+        return userDao.findById(id);
+    }
 }

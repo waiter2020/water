@@ -45,7 +45,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
 
-            System.out.println("进来了 JwtAuthenticationTokenFilter");
+            //System.out.println("进来了 JwtAuthenticationTokenFilter");
 
             // 得到 请求头的 认证信息 authToken
             String authToken = request.getHeader(this.tokenHeader);
@@ -53,7 +53,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // 解析 authToken 得到 用户名
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
-            System.out.println("checking authentication for user " + username);
+            //System.out.println("checking authentication for user " + username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -69,7 +69,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-            System.out.println("出去了 JwtAuthenticationTokenFilter");
+            //System.out.println("出去了 JwtAuthenticationTokenFilter");
 
         chain.doFilter(request, response);
 

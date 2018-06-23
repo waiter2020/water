@@ -3,6 +3,7 @@ package com.example.water.dao;
 import com.example.water.model.EquipmentInfo;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -16,4 +17,11 @@ public interface EquipmentInfoDao extends CrudRepository<EquipmentInfo,Long> {
      * @return
      */
     EquipmentInfo getFirstByEquipId(int equipId);
+
+    /**
+     * 通过家庭组id查找设备
+     * @param id
+     * @return
+     */
+    LinkedList<EquipmentInfo> findAllByFamily_Id(int id);
 }

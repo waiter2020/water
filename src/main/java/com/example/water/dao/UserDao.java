@@ -16,12 +16,19 @@ public interface UserDao extends CrudRepository<User,Integer> {
      * @param userName
      * @return
      */
-    public User findByUsername(String userName);
+     User findByUsername(String userName);
 
     /**
      * 通过家庭id查找所有成员
      * @param id
      * @return
      */
-    public LinkedList<User> findAllByFamily_Id(int id);
+     LinkedList<User> findAllByFamily_Id(int id);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    User findById(int id);
 }

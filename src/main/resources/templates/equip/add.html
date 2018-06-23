@@ -8,7 +8,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>添加家庭成员</title>
+		<title>添加设备</title>
 		<!-- Bootstrap core CSS -->
 		<link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 
@@ -45,7 +45,7 @@
 	<body>
 		<!--引入抽取的topbar-->
 		<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
-		<div th:replace="commons/bar::topbar(title='添加成员')"></div>
+		<div th:replace="commons/bar::topbar(title='绑定设备')"></div>
 
 		<div class="container-fluid">
 			<div class="row">
@@ -55,11 +55,11 @@
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
 					<!--需要区分是员工修改还是添加；-->
 					<h4 th:text="${addmsg}" th:if="${addmsg}"></h4>
-					<form th:action="@{/family/add}" method="post">
+					<form th:action="@{/equip/add}" method="post">
 
 						<div class="form-group">
 							<label>要添加的用户名</label>
-							<input name="userName" type="text" class="form-control" placeholder="用户名" >
+							<input name="equipId" type="text" class="form-control" placeholder="设备编号" >
 						</div>
 
 						<button type="submit" class="btn btn-primary" th:text="添加"></button>

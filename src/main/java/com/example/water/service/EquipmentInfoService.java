@@ -22,7 +22,16 @@ public class EquipmentInfoService {
     public EquipmentInfo getEquipmentById(String equipId){
         return equipmentInfoDao.getFirstByEquipId(Integer.parseInt(equipId));
     }
+
+    public void save(EquipmentInfo equipmentInfo){
+        equipmentInfoDao.save(equipmentInfo);
+    }
+
     public LinkedList<EquipmentInfo> findAll(){
         return (LinkedList<EquipmentInfo>) equipmentInfoDao.findAll();
+    }
+
+    public LinkedList<EquipmentInfo> findAllByFamily_Id(int id){
+        return equipmentInfoDao.findAllByFamily_Id(id);
     }
 }
