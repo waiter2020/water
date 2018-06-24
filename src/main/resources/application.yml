@@ -18,8 +18,10 @@ spring:
         dialect: org.hibernate.dialect.MySQL5Dialect
   jackson:
       date-format: yyyy-MM-dd HH:mm:ss
+  mvc:
+    date-format: yyyy-MM-dd'T'HH:mm
 server:
-  port: 8081
+  port: 8080
 app:
   jwt:
   header: token
@@ -39,7 +41,7 @@ jwt:
       register: "auth/register"
 
 tcp:
-  port: 5433
+  port: 5432
 boss:
   thread:
     count: 2

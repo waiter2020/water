@@ -22,16 +22,20 @@ import java.util.LinkedList;
 @Controller
 public class FamilyController {
     @Autowired
-    FamilyService familyService;
+    private FamilyService familyService;
     @Autowired
-    UserService userService;
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private UserService userService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(value = "/family")
     public String familylist(Model model, HttpServletRequest request){
         String username = request.getRemoteUser();
         logger.info("用户"+username+"获取了家庭组列表");
         User user = (User) userService.findByUserName(username);
+        if(user.getFamily()==null){
+            model.addAttribute("familymsg","您还没有加入家庭组，请先创建或加入家庭组");
+            return "family/list";
+        }
         LinkedList<User> users = userService.findAllByFamily_Id(user.getFamily().getId());
         Family family = familyService.findById(user.getFamily().getId());
         model.addAttribute("users",users);
@@ -41,13 +45,20 @@ public class FamilyController {
     }
 
     @DeleteMapping(value = "/family/{id}")
-    public String deleteUser(@PathVariable("id")Integer id,Model model){
+    public String deleteUser(@PathVariable("id")Integer id,Model model ,HttpServletRequest request){
+        User byUserName = (User) userService.findByUserName(request.getRemoteUser());
         User user = userService.findById(id);
+        //权限鉴定
+        if(user.getFamily().getId()!=byUserName.getFamily().getId()){
+            model.addAttribute("addmsg","无权添加");
+            logger.warn("用户"+byUserName+"尝试越权删除成员"+user);
+            return "redirect:/family";
+        }
         user.setFamily(null);
         logger.info("从家庭组里移除了"+user.getUsername());
         userService.save(user);
         model.addAttribute("familymsg","成功从家庭组里移除了"+user.getUsername());
-        return "redirect:/family";
+        return familylist(model,request);
     }
 
     @PostMapping(value = "/family/add")
@@ -55,6 +66,13 @@ public class FamilyController {
         String name = request.getRemoteUser();
         User byName = (User) userService.findByUserName(name);
         User byUserName = (User) userService.findByUserName(userName);
+        //权限检查
+        if(!byName.getFamily().getAdmin().equals(name)){
+            model.addAttribute("addmsg","无权添加");
+            logger.warn("用户"+byName+"尝试越权添加成员"+byUserName);
+            return "redirect:/family";
+        }
+
         if(byUserName==null){
             model.addAttribute("addmsg","用户不存在，请检查用户名");
             logger.error("用户不存在");
@@ -67,11 +85,31 @@ public class FamilyController {
         byUserName.setFamily(byName.getFamily());
         userService.save(byUserName);
         model.addAttribute("familymsg","成功将"+byUserName.getUsername()+"加入家庭组");
-        return "redirect:/family";
+        return familylist(model,request);
     }
     @GetMapping(value = "/family/add")
     public String add(){
         return "/family/add";
     }
 
+    @PostMapping(value = "/family/create")
+    public String create(Model model,Family family){
+        User byUserName = (User) userService.findByUserName(family.getAdmin());
+        if(byUserName.getFamily()!=null){
+            return "redirect:/family";
+        }
+        familyService.save(family);
+        family=familyService.findByAdmin(byUserName.getUsername());
+        byUserName.setFamily(family);
+        userService.save(byUserName);
+        model.addAttribute("familymsg","创建家庭组成功，快邀请成员加入吧");
+        logger.info(byUserName+"创建了家庭组"+family);
+        return "family/list";
+    }
+
+    @GetMapping(value = "/family/create")
+    public String getCreateView(Model model){
+        model.addAttribute("create_msg","请先创建家庭组");
+        return "family/create_family";
+    }
 }

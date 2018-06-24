@@ -21,7 +21,7 @@ public class Family{
      * 家庭名称
      */
     private String familyName;
-
+    private String admin;
 
     public Family() {
     }
@@ -29,7 +29,10 @@ public class Family{
 
     @Override
     public String toString() {
-        return "EquipmentInfo [id=" + id + ", FamilyName=" + familyName + "]";
+        return "Family{" +
+                "id=" + id +
+                ", familyName='" + familyName + '\'' +
+                ", admin='" + admin + '\'' +
+                '}';
     }
-
 }

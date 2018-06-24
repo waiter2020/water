@@ -215,8 +215,9 @@ public class TCPServerThread implements Runnable{
 	     }
 	     if(stateNow==0){   
 	    	 startTime = DataUtils.getTimeInMillis(year, month, day, hour, minute, second);
-	    	 if(1==equipState||2==equipState)
-	    		 msgHandler.saveEquipInfo(equipId,  total_water, 5);
+	    	 if(1==equipState||2==equipState) {
+				 msgHandler.saveEquipInfo(equipId,  total_water, 5);
+			 }
 	    	 
 	     }
 	     if(equipState==0&&stateNow==5){   	 
@@ -235,7 +236,7 @@ public class TCPServerThread implements Runnable{
 	
 	/**
 	 * 处理App发来的命令
-	 * @param recvPacket
+	 * @param
 	 * @param recvStr 命令字符串
 	 */
 	public void handleAppData(Socket clientSocket ,String recvStr) {
@@ -265,8 +266,9 @@ public class TCPServerThread implements Runnable{
 		equipId = recvStr;
 		msgHandler.addDevice(clientSocket, recvStr);
 		EquipmentInfo eInfo = msgHandler.getEquipInfoById(equipId);
-		if(null!=eInfo)
+		if(null!=eInfo) {
 			total_water = eInfo.getWaterUsage();
+		}
 		//设置终端的时间
 		String message = DataUtils.getTimeString();
 		message = "z"+equipId+"a"+message;	
@@ -289,10 +291,11 @@ public class TCPServerThread implements Runnable{
 		sb.append(equip_id);
 		sb.append(eInfo.getEquipState());
 		sb.append(String.format("%05d", eInfo.getWaterUsage()));
-		if(msgHandler.isDeviceConnect(equip_id))
+		if(msgHandler.isDeviceConnect(equip_id)) {
 			sb.append(1);
-		else
+		} else {
 			sb.append(0);
+		}
 		return sb.toString();
 	}
 	
@@ -347,18 +350,20 @@ public class TCPServerThread implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(!connect)
+				if(!connect) {
 					if(null==equipId||0==equipId.length()){
 						try {
 							flag = false;
-							if(socket!=null)
+							if(socket!=null) {
 								socket.close();
+							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+
 					}
+				}
 			
 		}
 		

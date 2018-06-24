@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Date;
 
 public class MessageHandler {
 	
@@ -129,7 +130,7 @@ public class MessageHandler {
 	}
 	
 	public void saveWaterInfo(String watermeter_id,long startTime,long  endTime,int volumn){
-		waterConditionService.saveWaterInfo(watermeter_id, startTime, endTime, volumn);
+		waterConditionService.saveWaterInfo(watermeter_id, new Date(startTime), new Date(endTime), volumn);
 	}
 	
 	public EquipmentInfo getEquipInfoById(String equip_id){

@@ -4,6 +4,8 @@ import com.example.water.model.Role;
 import com.example.water.model.User;
 import com.example.water.service.RoleService;
 import com.example.water.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
@@ -28,7 +30,7 @@ public class RegController {
     private UserService userService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /***
      *
      * @param model
@@ -54,12 +56,14 @@ public class RegController {
             //添加权限
             roles.add(new Role("USER"));
             //保存用户，对密码加密
-            userService.add(new User(username, phone,email, bCryptPasswordEncoder.encode(passwd), true,roles));
+            user=new User(username, phone,email, bCryptPasswordEncoder.encode(passwd), true,roles);
+            userService.add(user);
         }catch (Exception e){
 
             model.addAttribute("regerror",e.getCause()+",注册失败");
             return "register";
         }
+        logger.info("用户"+user+"注册成功");
         model.addAttribute("regss","注册成功");
         //返回登录页面
         return "login";

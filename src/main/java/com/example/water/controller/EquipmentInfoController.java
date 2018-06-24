@@ -26,7 +26,7 @@ public class EquipmentInfoController {
     private EquipmentInfoService equipmentInfoService;
     @Autowired
     private UserService userService;
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ResponseBody
     @RequestMapping(value = "/findall")
@@ -38,8 +38,12 @@ public class EquipmentInfoController {
     public String equip(Model model, HttpServletRequest request){
         String remoteUser = request.getRemoteUser();
         User byUserName = (User) userService.findByUserName(remoteUser);
+        if(byUserName.getFamily()==null){
+            return "equip/list";
+        }
         LinkedList<EquipmentInfo> allByFamily_id = equipmentInfoService.findAllByFamily_Id(byUserName.getFamily().getId());
         model.addAttribute("equips",allByFamily_id);
+        model.addAttribute("family",byUserName.getFamily());
         return "equip/list";
     }
 
@@ -47,34 +51,49 @@ public class EquipmentInfoController {
     public String addEquip(Model model,String equipId,HttpServletRequest request){
         String remoteUser = request.getRemoteUser();
         User byUserName = (User) userService.findByUserName(remoteUser);
+        if(byUserName.getFamily()==null){
+            return "redirect:/family/create";
+        }
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentById(equipId);
+
         if(equipmentById==null){
-            logger.error("设备不存在");
+            logger.warn("用户"+byUserName+"尝试绑定设备"+equipmentById+"失败 "+"原因：设备不存在");
             model.addAttribute("addmsg","设备不存在请检查设备id");
             return "equip/add";
         }else if(equipmentById.getFamily()!=null&&equipmentById.getFamily().getId()!=byUserName.getFamily().getId()){
-            logger.error("设备已被他人绑定");
+            logger.warn("用户"+byUserName+"尝试绑定设备"+equipmentById+"失败 "+"原因：已被其它账号绑定");
             model.addAttribute("addmsg","设备已被他人绑定");
             return "equip/add";
+        }
+
+        //权限鉴定
+        if(!byUserName.getFamily().getAdmin().equals(byUserName.getUsername())){
+            return "redirect:/equip";
         }
         equipmentById.setFamily(byUserName.getFamily());
         equipmentInfoService.save(equipmentById);
         logger.info("家庭组"+byUserName.getFamily().toString()+"绑定了设备"+equipmentById.getEquipId());
         model.addAttribute("equipmsg","绑定成功");
 
-        return "redirect:/equip";
+        return equip(model,request);
     }
 
     @DeleteMapping(value = "/equip/{id}")
-    public String deleteEquip(@PathVariable("id")String equipId,Model model){
+    public String deleteEquip(@PathVariable("id")String equipId,Model model,HttpServletRequest request){
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentById(equipId);
         Family family = equipmentById.getFamily();
+        User byUserName = (User) userService.findByUserName(request.getRemoteUser());
+        //权限鉴定
+        if(byUserName.getFamily().getId()!=family.getId()||!byUserName.getFamily().getAdmin().equals(byUserName.getUsername())){
+            return "redirect:/equip";
+        }
         equipmentById.setFamily(null);
         logger.info("家庭组"+family.getFamilyName()+"与设备"+equipmentById.getEquipId()+"解绑");
         equipmentInfoService.save(equipmentById);
         model.addAttribute("equipmsg","成功从家庭组里移除了"+equipmentById.getEquipId());
-        return "redirect:/equip";
+        return equip(model,request);
     }
+
     @GetMapping(value = "/equip/add")
     public String add(){
         return "/equip/add";
