@@ -15,4 +15,5 @@ public interface FamilyDao extends CrudRepository<Family,Integer> {
      * @return
      */
     Family findById(int id);
+    Family findByAdmin(String admin);
 }

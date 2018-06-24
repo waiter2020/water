@@ -8,7 +8,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>添加设备</title>
+		<title>终端水系统</title>
 		<!-- Bootstrap core CSS -->
 		<link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 
@@ -50,7 +50,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<!--引入侧边栏-->
-				<div th:replace="commons/bar::#sidebar(activeUri='family')"></div>
+				<div th:replace="commons/bar::#sidebar(activeUri='equip')"></div>
 
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
 					<!--需要区分是员工修改还是添加；-->
@@ -58,7 +58,7 @@
 					<form th:action="@{/equip/add}" method="post">
 
 						<div class="form-group">
-							<label>要添加的用户名</label>
+							<label>要添加的设备号</label>
 							<input name="equipId" type="text" class="form-control" placeholder="设备编号" >
 						</div>
 

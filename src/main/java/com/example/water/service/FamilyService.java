@@ -23,4 +23,12 @@ public class FamilyService {
     public Family findById(int id){
         return familyDao.findById(id);
     }
+
+    public void save(Family family){
+        familyDao.save(family);
+    }
+
+    public Family findByAdmin(String admin){
+        return familyDao.findByAdmin(admin);
+    }
 }

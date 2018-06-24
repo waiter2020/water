@@ -3,6 +3,7 @@ package com.example.water.dao;
 import com.example.water.model.WaterCondition;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,9 +21,9 @@ public interface WaterConditionDao extends CrudRepository<WaterCondition,Long> {
     /**
      * 获取某段时间内的用水信息
      * @param watermeterId
-     * @param starTime
-     * @param endTime
+     * @param starDate
+     * @param endDate
      * @return
      */
-    List<WaterCondition> getWaterConditionsByWatermeterIdAndStartTimeAfterAndEndTimeBeforeOrderByStartTime(String watermeterId,long starTime,long endTime);
+    List<WaterCondition> getWaterConditionsByWatermeterIdAndStartDateAfterAndEndDateBeforeOrderByStartDateDesc(String watermeterId, Date starDate, Date endDate);
 }

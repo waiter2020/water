@@ -10,6 +10,8 @@ import java.net.InetSocketAddress;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -28,9 +30,11 @@ public class TCPServer {
 
     private ChannelFuture serverChannelFuture;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @PostConstruct
     public void start() throws Exception {
-        System.out.println("Starting server at " + tcpPort);
+        logger.info("Starting server at " + tcpPort);
         serverChannelFuture = b.bind(tcpPort).sync();
     }
 

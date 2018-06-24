@@ -45,7 +45,7 @@
 	<body>
 		<!--引入抽取的topbar-->
 		<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
-		<div th:replace="commons/bar::topbar(title='添加成员')"></div>
+		<div th:replace="commons/bar::topbar(title='创建家庭组')"></div>
 
 		<div class="container-fluid">
 			<div class="row">
@@ -54,15 +54,15 @@
 
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
 					<!--需要区分是员工修改还是添加；-->
-					<h4 th:text="${addmsg}" th:if="${addmsg}"></h4>
-					<form th:action="@{/family/add}" method="post">
+					<h4 th:text="${create_msg}" th:if="${create_msg}"></h4>
+					<form th:action="@{/family/create}" method="post">
 
 						<div class="form-group">
-							<label>要添加的用户名</label>
-							<input name="userName" type="text" class="form-control" placeholder="用户名" >
+							<label>要创建的家庭组名</label>
+							<input name="familyName" type="text" class="form-control" placeholder="要创建的家庭组名" >
 						</div>
-
-						<button type="submit" class="btn btn-primary" th:text="添加"></button>
+						<input th:type="hidden" th:name="admin" th:value="${#request.getRemoteUser()}">
+						<button type="submit" class="btn btn-primary" th:text="创建"></button>
 					</form>
 				</main>
 			</div>

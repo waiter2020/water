@@ -47,7 +47,7 @@
 
 	<body>
 	<!--引入topbar-->
-	<div th:replace="commons/bar::topbar"></div>
+	<div th:replace="commons/bar::topbar(title='实时流量')"></div>
 	<div class="container-fluid">
 		<div class="row">
 			<!--引入sidebar-->
@@ -62,7 +62,7 @@
 					</div>
 				</div>
 				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Dashboard</h1>
+					<h1 class="h2">设备1：</h1>
 					<div class="btn-toolbar mb-2 mb-md-0">
 						<div class="btn-group mr-2">
 							<button class="btn btn-sm btn-outline-secondary">Share</button>
