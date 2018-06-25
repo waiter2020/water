@@ -4,7 +4,7 @@ import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Family;
 import com.example.water.model.User;
 import com.example.water.service.EquipmentInfoService;
-import com.example.water.service.UserService;
+import com.example.water.service.UserDetailsServiceIml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class EquipmentInfoController {
     @Autowired
     private EquipmentInfoService equipmentInfoService;
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceIml userDetailsServiceIml;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ResponseBody
@@ -38,7 +38,7 @@ public class EquipmentInfoController {
     @GetMapping(value = "/equip")
     public String equip(Model model, HttpServletRequest request){
         String remoteUser = request.getRemoteUser();
-        User byUserName = (User) userService.findByUserName(remoteUser);
+        User byUserName = (User) userDetailsServiceIml.findByUserName(remoteUser);
         if(byUserName.getFamily()==null){
             return "equip/list";
         }
@@ -52,14 +52,14 @@ public class EquipmentInfoController {
     @PostMapping(value = "equip/add")
     public String addEquip(Model model,String equipId,HttpServletRequest request){
         String remoteUser = request.getRemoteUser();
-        User byUserName = (User) userService.findByUserName(remoteUser);
+        User byUserName = (User) userDetailsServiceIml.findByUserName(remoteUser);
         if(byUserName.getFamily()==null){
             return "redirect:/family/create";
         }
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentById(equipId);
 
         if(equipmentById==null){
-            logger.warn("用户"+byUserName+"尝试绑定设备"+equipmentById+"失败 "+"原因：设备不存在");
+            logger.warn("用户"+byUserName+"尝试绑定设备"+equipId+"失败 "+"原因：设备不存在");
             model.addAttribute("addmsg","设备不存在请检查设备id");
             return "equip/add";
         }else if(equipmentById.getFamily()!=null&&equipmentById.getFamily().getId()!=byUserName.getFamily().getId()){
@@ -85,7 +85,7 @@ public class EquipmentInfoController {
     public String deleteEquip(@PathVariable("id")String equipId,Model model,HttpServletRequest request){
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentById(equipId);
         Family family = equipmentById.getFamily();
-        User byUserName = (User) userService.findByUserName(request.getRemoteUser());
+        User byUserName = (User) userDetailsServiceIml.findByUserName(request.getRemoteUser());
         //权限鉴定
         if(byUserName.getFamily().getId()!=family.getId()||!byUserName.getFamily().getAdmin().equals(byUserName.getUsername())){
             return "redirect:/equip";

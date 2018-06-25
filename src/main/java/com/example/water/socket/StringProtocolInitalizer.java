@@ -29,7 +29,6 @@ public class StringProtocolInitalizer extends ChannelInitializer<SocketChannel> 
 
     @Autowired
     ServerHandler serverHandler;
-    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {

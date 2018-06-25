@@ -1,6 +1,6 @@
 package com.example.water.component;
 
-import com.example.water.service.UserService;
+import com.example.water.service.UserDetailsServiceIml;
 import com.example.water.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    private UserDetailsService userDetailsService = new UserService();
+    private UserDetailsService userDetailsService = new UserDetailsServiceIml();
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;

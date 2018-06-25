@@ -25,8 +25,7 @@ public class WaterCondition {
 	private Date startDate;
 	private Date endDate;
 	public WaterCondition() {
-		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
 
@@ -34,8 +33,8 @@ public class WaterCondition {
 		this.watermeterId = watermeterId;
 		this.volumn = volumn;
 		this.timeUse = timeUse;
-		this.startDate = startDate;
-		this.endDate = endDate;
+		this.startDate = (Date) startDate.clone();
+		this.endDate = (Date) endDate.clone();
 	}
 
 	@Override
@@ -44,9 +43,29 @@ public class WaterCondition {
 				+ ", startTime=" + startDate + ", endTime=" + endDate
 				+ ", volumn=" + volumn + ", time_use=" + timeUse + "]";
 	}
-	
-	
-	
-	
 
+
+	public Date getStartDate() {
+		return (Date) startDate.clone();
+	}
+
+	public void setStartDate(Date startDate) {
+		if(startDate!=null) {
+			this.startDate = (Date) startDate.clone();
+		}else {
+			this.startDate=null;
+		}
+	}
+
+	public Date getEndDate() {
+		return (Date) endDate.clone();
+	}
+
+	public void setEndDate(Date endDate) {
+		if(endDate!=null) {
+			this.endDate = (Date) endDate.clone();
+		}else {
+			this.endDate=null;
+		}
+	}
 }
