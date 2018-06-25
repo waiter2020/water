@@ -1,13 +1,10 @@
 package com.example.water.controller;
 
 import com.example.water.model.User;
-import com.example.water.service.UserService;
+import com.example.water.service.UserDetailsServiceIml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -18,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceIml userDetailsServiceIml;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -29,7 +26,7 @@ public class UserController {
      */
     @RequestMapping(value = "/find")
     public Object find(String username){
-        return userService.findByUserName(username);
+        return userDetailsServiceIml.findByUserName(username);
     }
 
     /**
@@ -41,7 +38,7 @@ public class UserController {
      */
     @RequestMapping(value = "/add")
     public void add(String userName,String email,String phoneNumber,String passwd){
-        userService.add(new User(userName,email,phoneNumber,bCryptPasswordEncoder.encode(passwd),true));
+        userDetailsServiceIml.add(new User(userName,email,phoneNumber,bCryptPasswordEncoder.encode(passwd),true));
     }
 
 

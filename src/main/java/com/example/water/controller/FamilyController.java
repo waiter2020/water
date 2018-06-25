@@ -1,13 +1,18 @@
 package com.example.water.controller;
 
+import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Family;
 import com.example.water.model.User;
+import com.example.water.service.EquipmentInfoService;
 import com.example.water.service.FamilyService;
-import com.example.water.service.UserService;
+import com.example.water.service.UserDetailsServiceIml;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +29,22 @@ public class FamilyController {
     @Autowired
     private FamilyService familyService;
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceIml userDetailsServiceIml;
+    @Autowired
+    private EquipmentInfoService equipmentInfoService;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(value = "/family")
     public String familylist(Model model, HttpServletRequest request){
         String username = request.getRemoteUser();
         logger.info("用户"+username+"获取了家庭组列表");
-        User user = (User) userService.findByUserName(username);
+        User user = (User) userDetailsServiceIml.findByUserName(username);
         if(user.getFamily()==null){
             model.addAttribute("familymsg","您还没有加入家庭组，请先创建或加入家庭组");
             return "family/list";
         }
-        LinkedList<User> users = userService.findAllByFamily_Id(user.getFamily().getId());
+        LinkedList<User> users = userDetailsServiceIml.findAllByFamilyId(user.getFamily().getId());
         Family family = familyService.findById(user.getFamily().getId());
         model.addAttribute("users",users);
         model.addAttribute("family",family);
@@ -46,8 +54,8 @@ public class FamilyController {
 
     @DeleteMapping(value = "/family/{id}")
     public String deleteUser(@PathVariable("id")Integer id,Model model ,HttpServletRequest request){
-        User byUserName = (User) userService.findByUserName(request.getRemoteUser());
-        User user = userService.findById(id);
+        User byUserName = (User) userDetailsServiceIml.findByUserName(request.getRemoteUser());
+        User user = userDetailsServiceIml.findById(id);
         //权限鉴定
         if(user.getFamily().getId()!=byUserName.getFamily().getId()){
             model.addAttribute("addmsg","无权添加");
@@ -56,7 +64,7 @@ public class FamilyController {
         }
         user.setFamily(null);
         logger.info("从家庭组里移除了"+user.getUsername());
-        userService.save(user);
+        userDetailsServiceIml.save(user);
         model.addAttribute("familymsg","成功从家庭组里移除了"+user.getUsername());
         return familylist(model,request);
     }
@@ -64,8 +72,8 @@ public class FamilyController {
     @PostMapping(value = "/family/add")
     public String addUser(String userName ,Model model, HttpServletRequest request){
         String name = request.getRemoteUser();
-        User byName = (User) userService.findByUserName(name);
-        User byUserName = (User) userService.findByUserName(userName);
+        User byName = (User) userDetailsServiceIml.findByUserName(name);
+        User byUserName = (User) userDetailsServiceIml.findByUserName(userName);
         //权限检查
         if(!byName.getFamily().getAdmin().equals(name)){
             model.addAttribute("addmsg","无权添加");
@@ -83,33 +91,88 @@ public class FamilyController {
             return "/family/add";
         }
         byUserName.setFamily(byName.getFamily());
-        userService.save(byUserName);
+        userDetailsServiceIml.save(byUserName);
         model.addAttribute("familymsg","成功将"+byUserName.getUsername()+"加入家庭组");
         return familylist(model,request);
     }
+
+
     @GetMapping(value = "/family/add")
     public String add(){
         return "/family/add";
     }
 
+    @Transactional
     @PostMapping(value = "/family/create")
     public String create(Model model,Family family){
-        User byUserName = (User) userService.findByUserName(family.getAdmin());
+        User byUserName = (User) userDetailsServiceIml.findByUserName(family.getAdmin());
         if(byUserName.getFamily()!=null){
             return "redirect:/family";
         }
         familyService.save(family);
         family=familyService.findByAdmin(byUserName.getUsername());
         byUserName.setFamily(family);
-        userService.save(byUserName);
+        userDetailsServiceIml.save(byUserName);
         model.addAttribute("familymsg","创建家庭组成功，快邀请成员加入吧");
         logger.info(byUserName+"创建了家庭组"+family);
         return "family/list";
     }
 
+
     @GetMapping(value = "/family/create")
     public String getCreateView(Model model){
         model.addAttribute("create_msg","请先创建家庭组");
         return "family/create_family";
+    }
+
+    @Transactional
+    @GetMapping(value = "/family/remove")
+    public String remove(Model model,HttpServletRequest request) throws Exception {
+        String remoteUser = request.getRemoteUser();
+        User byUserName = (User) userDetailsServiceIml.findByUserName(remoteUser);
+        if (byUserName.getFamily().getAdmin().equals(byUserName.getUsername())) {
+            if (byUserName.getFamily() == null) {
+                return "redirect:/family";
+            }
+            try {
+                LinkedList<User> allByFamilyId = userDetailsServiceIml.findAllByFamilyId(byUserName.getFamily().getId());
+
+                logger.warn(byUserName + "解散了家庭组" + byUserName.getFamily());
+
+                int id = byUserName.getFamily().getId();
+                for (User a :
+                        allByFamilyId) {
+                    a.setFamily(null);
+                }
+                userDetailsServiceIml.saveAll(allByFamilyId);
+
+                LinkedList<EquipmentInfo> byFamilyId = equipmentInfoService.findAllByFamily_Id(id);
+                for (EquipmentInfo a :
+                        byFamilyId) {
+                    a.setFamily(null);
+                }
+                equipmentInfoService.saveAll(byFamilyId);
+                familyService.remove(id);
+                model.addAttribute("familymsg", "成功解散家庭组");
+            } catch (Exception e) {
+
+                throw new Exception();
+            }
+        }else {
+            logger.warn("用户"+byUserName+"尝试非法解散群组");
+            model.addAttribute("familymsg","无权操作");
+        }
+        return familylist(model,request);
+    }
+
+    @GetMapping(value = "/family/exit")
+    public String exit(Model model,HttpServletRequest request){
+        String remoteUser = request.getRemoteUser();
+        User byUserName = (User) userDetailsServiceIml.findByUserName(remoteUser);
+        logger.warn("用户"+byUserName+"退出了家庭组"+byUserName.getFamily());
+        byUserName.setFamily(null);
+        userDetailsServiceIml.save(byUserName);
+        model.addAttribute("familymsg","成功退出家庭组");
+        return familylist(model,request);
     }
 }

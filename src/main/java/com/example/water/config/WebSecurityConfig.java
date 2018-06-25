@@ -1,7 +1,7 @@
 package com.example.water.config;
 
 import com.example.water.component.JwtAuthenticationTokenFilter;
-import com.example.water.service.UserService;
+import com.example.water.service.UserDetailsServiceIml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserService userService;
+    UserDetailsServiceIml userDetailsServiceIml;
     @Autowired
     JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
+        auth.userDetailsService(userDetailsServiceIml);
     }
 
 

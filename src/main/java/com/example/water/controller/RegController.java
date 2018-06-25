@@ -2,8 +2,7 @@ package com.example.water.controller;
 
 import com.example.water.model.Role;
 import com.example.water.model.User;
-import com.example.water.service.RoleService;
-import com.example.water.service.UserService;
+import com.example.water.service.UserDetailsServiceIml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Collection;
+import javax.transaction.Transactional;
 import java.util.LinkedList;
-import java.util.List;
 
 
 /**
@@ -27,7 +25,7 @@ import java.util.List;
 @org.springframework.stereotype.Controller
 public class RegController {
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceIml userDetailsServiceIml;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -40,13 +38,14 @@ public class RegController {
      * @param passwd 密码
      * @return
      */
+    @Transactional
     @RequestMapping(value = "/registeraction",method = RequestMethod.POST)
     public Object register(Model model,
                            @ModelAttribute("username")String username,
                            @ModelAttribute("email")String email,
                            @ModelAttribute("phone")String phone,
                            @ModelAttribute("passwd")String passwd){
-        User user=(User) userService.findByUserName(username);
+        User user=(User) userDetailsServiceIml.findByUserName(username);
 
         try {
             if(user!=null){
@@ -57,7 +56,7 @@ public class RegController {
             roles.add(new Role("USER"));
             //保存用户，对密码加密
             user=new User(username, phone,email, bCryptPasswordEncoder.encode(passwd), true,roles);
-            userService.add(user);
+            userDetailsServiceIml.add(user);
         }catch (Exception e){
 
             model.addAttribute("regerror",e.getCause()+",注册失败");

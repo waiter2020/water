@@ -95,5 +95,15 @@ public class User implements UserDetails {
         return enabled;
     }
 
+    public Date getBirth() {
+        return (Date) birth.clone();
+    }
 
+    public void setBirth(Date birth) {
+        if(birth!=null) {
+            this.birth = (Date) birth.clone();
+        }else {
+            this.birth=null;
+        }
+    }
 }

@@ -34,4 +34,8 @@ public class EquipmentInfoService {
     public LinkedList<EquipmentInfo> findAllByFamily_Id(int id){
         return equipmentInfoDao.findAllByFamily_Id(id);
     }
+
+    public void saveAll(Iterable<EquipmentInfo> iterable){
+        equipmentInfoDao.saveAll(iterable);
+    }
 }

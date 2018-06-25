@@ -15,7 +15,7 @@ import java.util.LinkedList;
  * @author waiter
  */
 @Service
-public class UserService implements UserDetailsService {
+public class UserDetailsServiceIml implements UserDetailsService {
     @Autowired
     private UserDao userDao;
 
@@ -41,11 +41,15 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPasswd(),user.getAuthorities());
     }
 
-    public LinkedList<User> findAllByFamily_Id(int id){
+    public LinkedList<User> findAllByFamilyId(int id){
         return userDao.findAllByFamily_Id(id);
     }
 
     public User findById(int id){
         return userDao.findById(id);
+    }
+
+    public void saveAll(Iterable<User> list ){
+        userDao.saveAll(list);
     }
 }

@@ -4,23 +4,19 @@ import com.example.water.model.EquipmentInfo;
 import com.example.water.model.User;
 import com.example.water.model.WaterCondition;
 import com.example.water.service.EquipmentInfoService;
-import com.example.water.service.UserService;
+import com.example.water.service.UserDetailsServiceIml;
 import com.example.water.service.WaterConditionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.resource.HttpResource;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -35,7 +31,7 @@ public class WaterConditionController extends HttpServlet {
     @Autowired
     private WaterConditionService waterConditionService;
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceIml userDetailsServiceIml;
     @Autowired
     private EquipmentInfoService equipmentInfoService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -55,7 +51,7 @@ public class WaterConditionController extends HttpServlet {
 
         String watermeterId = request.getParameter("watermeter_id");
         String st=request.getParameter("startTime");
-        long startTime = Integer.parseInt(st);
+        long startTime = Long.parseLong(st);
         String et=request.getParameter("endTime");
         long endTime = Long.parseLong(et);
         String resultString = waterConditionService.getWaterInfoByDate(watermeterId, new Date(startTime), new Date(endTime));
@@ -80,12 +76,12 @@ public class WaterConditionController extends HttpServlet {
     @GetMapping(value = "water")
     public String get(Model model,HttpServletRequest request){
         String remoteUser = request.getRemoteUser();
-        User byUserName = (User) userService.findByUserName(remoteUser);
+        User byUserName = (User) userDetailsServiceIml.findByUserName(remoteUser);
         if(byUserName.getFamily()==null){
             return "water/list";
         }
-        LinkedList<EquipmentInfo> allByFamily_id = equipmentInfoService.findAllByFamily_Id(byUserName.getFamily().getId());
-        model.addAttribute("equips",allByFamily_id);
+        LinkedList<EquipmentInfo> byFamilyId = equipmentInfoService.findAllByFamily_Id(byUserName.getFamily().getId());
+        model.addAttribute("equips",byFamilyId);
         return "water/list";
     }
 

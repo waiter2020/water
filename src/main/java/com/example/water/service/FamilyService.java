@@ -31,4 +31,9 @@ public class FamilyService {
     public Family findByAdmin(String admin){
         return familyDao.findByAdmin(admin);
     }
+
+    public void remove(int id){
+        familyDao.removeById(id);
+    }
+
 }
