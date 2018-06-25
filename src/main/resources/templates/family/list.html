@@ -53,9 +53,18 @@
 				<div th:replace="commons/bar::#sidebar(activeUri='family')"></div>
 
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-					<div th:if="${family!=null}" >
-					<h2><a class="btn btn-sm btn-success" th:if="${#request.getRemoteUser()}==${family.admin}"  th:href="@{/family/add}">添加成员</a></h2>
-					</div>
+                    <nav class="navbar  sticky-top flex-md-nowrap p-0" th:if="${family!=null}" >
+                        <div  >
+                            <h2><a class="btn btn-sm btn-success" th:if="${#request.getRemoteUser()}==${family.admin}"  th:href="@{/family/add}">添加成员</a></h2>
+                        </div>
+                        <ul class="navbar-nav px-3">
+                            <li class="nav-item text-nowrap">
+                                <a class="btn btn-sm btn-danger" th:if="${#request.getRemoteUser()}==${family.admin}" th:href="@{/family/remove}" onclick="return f('你确定要解散家庭组吗？')" th:text="解散家庭组"></a>
+                                <a class="btn btn-sm btn-danger" th:if="${#request.getRemoteUser()}!=${family.admin}" th:href="@{/family/exit}" onclick="return f('你确定要退出家庭组吗？')" th:text="退出家庭组"></a>
+                            </li>
+                        </ul>
+                    </nav>
+
 					<h2><a class="btn btn-sm btn-success" th:if="${family==null}"  th:href="@{/family/create}">创建家庭组</a></h2>
 					<h4 class="btn btn-sm btn-success" th:if="${familymsg}" th:text="${familymsg}"></h4>
 					<div class="table-responsive">
@@ -113,5 +122,16 @@
 			    return false;
             });
 		</script>
+    <script>
+        function f(a) {
+            if(window.confirm(a)){
+                //alert("确定");
+                return true;
+            }else{
+                //alert("取消");
+                return false;
+            }
+        }
+    </script>
 	</body>
 </html>

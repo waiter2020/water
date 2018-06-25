@@ -1,13 +1,18 @@
 package com.example.water.controller;
 
+import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Family;
 import com.example.water.model.User;
+import com.example.water.service.EquipmentInfoService;
 import com.example.water.service.FamilyService;
 import com.example.water.service.UserService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +30,9 @@ public class FamilyController {
     private FamilyService familyService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private EquipmentInfoService equipmentInfoService;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(value = "/family")
@@ -87,11 +95,14 @@ public class FamilyController {
         model.addAttribute("familymsg","成功将"+byUserName.getUsername()+"加入家庭组");
         return familylist(model,request);
     }
+
+
     @GetMapping(value = "/family/add")
     public String add(){
         return "/family/add";
     }
 
+    @Transactional
     @PostMapping(value = "/family/create")
     public String create(Model model,Family family){
         User byUserName = (User) userService.findByUserName(family.getAdmin());
@@ -107,9 +118,61 @@ public class FamilyController {
         return "family/list";
     }
 
+
     @GetMapping(value = "/family/create")
     public String getCreateView(Model model){
         model.addAttribute("create_msg","请先创建家庭组");
         return "family/create_family";
+    }
+
+    @Transactional
+    @GetMapping(value = "/family/remove")
+    public String remove(Model model,HttpServletRequest request) throws Exception {
+        String remoteUser = request.getRemoteUser();
+        User byUserName = (User) userService.findByUserName(remoteUser);
+        if (byUserName.getFamily().getAdmin().equals(byUserName.getUsername())) {
+            if (byUserName.getFamily() == null) {
+                return "redirect:/family";
+            }
+            try {
+                LinkedList<User> allByFamilyId = userService.findAllByFamily_Id(byUserName.getFamily().getId());
+
+                logger.warn(byUserName + "解散了家庭组" + byUserName.getFamily());
+
+                int id = byUserName.getFamily().getId();
+                for (User a :
+                        allByFamilyId) {
+                    a.setFamily(null);
+                }
+                userService.saveAll(allByFamilyId);
+
+                LinkedList<EquipmentInfo> byFamilyId = equipmentInfoService.findAllByFamily_Id(id);
+                for (EquipmentInfo a :
+                        byFamilyId) {
+                    a.setFamily(null);
+                }
+                equipmentInfoService.saveAll(byFamilyId);
+                familyService.remove(id);
+                model.addAttribute("familymsg", "成功解散家庭组");
+            } catch (Exception e) {
+
+                throw new Exception();
+            }
+        }else {
+            logger.warn("用户"+byUserName+"尝试非法解散群组");
+            model.addAttribute("familymsg","无权操作");
+        }
+        return familylist(model,request);
+    }
+
+    @GetMapping(value = "/family/exit")
+    public String exit(Model model,HttpServletRequest request){
+        String remoteUser = request.getRemoteUser();
+        User byUserName = (User) userService.findByUserName(remoteUser);
+        logger.warn("用户"+byUserName+"退出了家庭组"+byUserName.getFamily());
+        byUserName.setFamily(null);
+        userService.save(byUserName);
+        model.addAttribute("familymsg","成功退出家庭组");
+        return familylist(model,request);
     }
 }

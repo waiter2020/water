@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.LinkedList;
 
 
@@ -47,6 +48,7 @@ public class EquipmentInfoController {
         return "equip/list";
     }
 
+    @Transactional
     @PostMapping(value = "equip/add")
     public String addEquip(Model model,String equipId,HttpServletRequest request){
         String remoteUser = request.getRemoteUser();
@@ -78,6 +80,7 @@ public class EquipmentInfoController {
         return equip(model,request);
     }
 
+    @Transactional
     @DeleteMapping(value = "/equip/{id}")
     public String deleteEquip(@PathVariable("id")String equipId,Model model,HttpServletRequest request){
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentById(equipId);

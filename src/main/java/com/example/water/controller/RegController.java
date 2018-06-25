@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class RegController {
      * @param passwd 密码
      * @return
      */
+    @Transactional
     @RequestMapping(value = "/registeraction",method = RequestMethod.POST)
     public Object register(Model model,
                            @ModelAttribute("username")String username,

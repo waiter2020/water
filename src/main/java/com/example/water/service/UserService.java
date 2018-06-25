@@ -48,4 +48,8 @@ public class UserService implements UserDetailsService {
     public User findById(int id){
         return userDao.findById(id);
     }
+
+    public void saveAll(Iterable<User> list ){
+        userDao.saveAll(list);
+    }
 }
