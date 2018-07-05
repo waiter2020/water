@@ -60,7 +60,7 @@
                 <label th:text="选择设备ID "></label>
                 <!--提交的是部门的id-->
                 <select  name="equipId">
-                    <option  th:value="${equip.equipId}" th:each="equip:${equips}" th:text="${equip.equipId}">1</option>
+                    <option th:selected="${equipId!=null}?${equipId==equip.equipId}" th:value="${equip.equipId}" th:each="equip:${equips}" th:text="${equip.equipId}">1</option>
                 </select>
                 <label th:text="开始时间"></label>
                 <input type="datetime-local" name="startTime" th:value="${startTimes!=null}?${startTimes}:'2018-01-01T01:00'" />
@@ -95,10 +95,26 @@
                     </tbody>
                 </table>
             </div>
+            <nav th:if="${page!=null}" class="navbar   flex-md-nowrap p-0"  >
+
+                <ul class="navbar-nav px-3">
+                    <li class="nav-item text-nowrap">
+                        <button class="btn btn-sm btn-success nextBtn" th:if="${page.getPageable().getPageNumber()!=0}" th:attr="del_uri=@{/water/}" >首页</button>&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-success nextBtn" th:if="${page.getPageable().getPageNumber()!=0}" th:attr="del_uri=@{/water/}+${page.getPageable().getPageNumber()-1}" >上一页 </button>&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-success nextBtn" th:if="${page.getPageable().getPageNumber()}!=${page.getTotalPages()-1}" th:attr="del_uri=@{/water/}+${page.getPageable().getPageNumber()+1}" >下一页 </button>&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-success nextBtn" th:if="${page.getPageable().getPageNumber()}!=${page.getTotalPages()-1}" th:attr="del_uri=@{/water/}+${page.getTotalPages()-1}">末页</button>&nbsp;&nbsp;
+                        <span th:text="'当前 '+${page.getPageable().getPageNumber()+1}+'/'+${page.getTotalPages()}+' 页'"></span>     &nbsp;&nbsp;
+                    </li>
+                </ul>
+            </nav>
         </main>
-        <!--<form id="deleteEquipForm"  method="post">-->
-        <!--<input type="hidden" name="_method" value="delete"/>-->
-        <!--</form>-->
+        <form id="chancePageForm"  method="post">
+            <select style="display:none;" name="equipId" type="hidden">
+                <option th:selected="${equipId!=null}?${equipId==equip.equipId}" th:value="${equip.equipId}" th:each="equip:${equips}" th:text="${equip.equipId}">1</option>
+            </select>
+            <input type="hidden" name="startTime" th:value="${startTimes!=null}?${startTimes}:'2018-01-01T01:00'" />
+            <input type="hidden"  name="endTime" th:value="${endTimes!=null}?${endTimes}:'2018-06-27T01:00'"  />
+        </form>
     </div>
 </div>
 
@@ -113,6 +129,13 @@
 <script type="text/javascript" th:src="@{/js/feather.min.js}"></script>
 <script>
     feather.replace()
+</script>
+<script>
+    $(".nextBtn").click(function(){
+        //删除当前员工的
+        $("#chancePageForm").attr("action",$(this).attr("del_uri")).submit();
+        return false;
+    });
 </script>
 
 </body>

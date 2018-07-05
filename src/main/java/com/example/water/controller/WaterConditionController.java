@@ -9,6 +9,7 @@ import com.example.water.service.WaterConditionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by  waiter on 18-6-18.
@@ -60,16 +62,25 @@ public class WaterConditionController extends HttpServlet {
         out.flush();
         out.close();
     }
-    @PostMapping(value = "/water")
-    public String getWater(String equipId, Date startTime, Date endTime,Model model,HttpServletRequest request){
-        Collection<WaterCondition> waterInfosByDate = waterConditionService.getWaterInfosByDate(equipId, startTime, endTime);
+    @PostMapping(value = {"/water","/water/{page}"})
+    public String getWater(@PathVariable(name = "page",required = false)Integer page ,String equipId, Date startTime, Date endTime,Model model,HttpServletRequest request){
+        if(page==null){
+            page=new Integer(0);
+        }else if(page<0){
+            page=0;
+        }
+
+        Page<WaterCondition> waterInfosByDate = waterConditionService.getWaterInfosByDate(page,equipId, startTime, endTime);
         logger.info("查询了"+equipId+" 开始时间："+startTime+" 结束时间："+endTime);
+        List<WaterCondition> content = waterInfosByDate.getContent();
+        model.addAttribute("page",waterInfosByDate);
         model.addAttribute("waterConditions",waterInfosByDate);
         SimpleDateFormat format0 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
         String startTimes=format0.format(startTime);
         String endTimes=format0.format(endTime);
         model.addAttribute("startTimes",startTimes);
         model.addAttribute("endTimes",endTimes);
+        model.addAttribute("equipId",Integer.parseInt(equipId));
         return get(model,request);
     }
 

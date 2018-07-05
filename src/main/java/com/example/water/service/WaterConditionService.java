@@ -4,6 +4,9 @@ import com.example.water.dao.WaterConditionDao;
 import com.example.water.model.WaterCondition;
 import com.example.water.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,10 +28,12 @@ public class WaterConditionService {
     }
 
     public String getWaterInfoByDate(String watermeterId,Date startTime,Date endTime){
-        return DataUtils.createJsonString(waterConditionDao.getWaterConditionsByWatermeterIdAndStartDateAfterAndEndDateBeforeOrderByStartDateDesc(watermeterId,startTime,endTime));
+        Pageable pageable = PageRequest.of(1, 20);
+        return DataUtils.createJsonString(waterConditionDao.getWaterConditionsByWatermeterIdAndStartDateAfterAndEndDateBeforeOrderByStartDateDesc(pageable,watermeterId,startTime,endTime));
     }
-    public Collection<WaterCondition> getWaterInfosByDate(String watermeterId, Date startTime, Date endTime){
-        return waterConditionDao.getWaterConditionsByWatermeterIdAndStartDateAfterAndEndDateBeforeOrderByStartDateDesc(watermeterId,startTime,endTime);
+    public Page<WaterCondition> getWaterInfosByDate(int page,String watermeterId, Date startTime, Date endTime){
+        Pageable pageable = PageRequest.of(page, 5);
+        return waterConditionDao.findAllByWatermeterIdAndAndStartDateAfterAndEndDateBeforeOrderByStartDate(pageable,watermeterId,startTime,endTime);
     }
     public ArrayList<WaterCondition> findAll(){
         return (ArrayList<WaterCondition>) waterConditionDao.findAll();
