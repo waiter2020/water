@@ -88,7 +88,7 @@ public class FamilyController {
         }else if(byUserName.getFamily()!=null&&byUserName.getFamily().getId()!=byName.getFamily().getId()){
             model.addAttribute("addmsg","用户已加入其他家庭组");
             logger.error("用户不存在");
-            return "/family/add";
+            return "family/add";
         }
         byUserName.setFamily(byName.getFamily());
         userDetailsServiceIml.save(byUserName);
@@ -99,7 +99,7 @@ public class FamilyController {
 
     @GetMapping(value = "/family/add")
     public String add(){
-        return "/family/add";
+        return "family/add";
     }
 
     @Transactional

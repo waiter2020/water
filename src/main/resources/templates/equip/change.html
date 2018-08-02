@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>终端水系统</title>
+		<!-- Bootstrap core CSS -->
+		<link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link href="/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+		<style type="text/css">
+			/* Chart.js */
+			
+			@-webkit-keyframes chartjs-render-animation {
+				from {
+					opacity: 0.99
+				}
+				to {
+					opacity: 1
+				}
+			}
+			
+			@keyframes chartjs-render-animation {
+				from {
+					opacity: 0.99
+				}
+				to {
+					opacity: 1
+				}
+			}
+			
+			.chartjs-render-monitor {
+				-webkit-animation: chartjs-render-animation 0.001s;
+				animation: chartjs-render-animation 0.001s;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--引入抽取的topbar-->
+		<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
+		<div th:replace="commons/bar::topbar(title='修改设备参数')"></div>
+
+		<div class="container-fluid">
+			<div class="row">
+				<!--引入侧边栏-->
+				<div th:replace="commons/bar::#sidebar(activeUri='equip')"></div>
+
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+					<!--需要区分是员工修改还是添加；-->
+					<form th:action="@{/equip/change}" method="post">
+						<!--发送put请求修改员工数据-->
+						<!--
+						1、SpringMVC中配置HiddenHttpMethodFilter;（SpringBoot自动配置好的）
+						2、页面创建一个post表单
+						3、创建一个input项，name="_method";值就是我们指定的请求方式
+						-->
+						<input type="hidden" name="equipId" th:if="${equip!=null}" th:value="${equip.equipId}">
+						<div class="form-group">
+							<label>纬度</label>
+							<input name="locLatitude" type="number" class="form-control"  th:value="${equip!=null}?${equip.locLatitude}">
+						</div>
+						<div class="form-group">
+							<label>经度</label>
+							<input name="locLongitude" type="number" class="form-control"  th:value="${equip!=null}?${equip.locLongitude}">
+						</div>
+						<div class="form-group">
+							<label>检漏模式</label>
+							<!--提交的是部门的id-->
+							<select class="form-control" name="model">
+								<option th:selected="${equip!=null}?${equip.model ==0}" th:value="0"  th:text="大漏失、小漏失都检测">1</option>
+								<option th:selected="${equip!=null}?${equip.model ==1}" th:value="1"  th:text="只检测小漏失">1</option>
+								<option th:selected="${equip!=null}?${equip.model ==2}" th:value="2"  th:text="只检测大漏失">1</option>
+								<option th:selected="${equip!=null}?${equip.model ==3}" th:value="3"  th:text="大小漏失都不检测">1</option>
+
+							</select>
+						</div>
+						<div class="form-group">
+							<label>阈值类型</label>
+							<!--提交的是部门的id-->
+							<select class="form-control" name="thresholdType">
+								<option th:selected="${equip!=null}?${equip.thresholdType ==0}" th:value="0"  th:text="流量">1</option>
+								<option th:selected="${equip!=null}?${equip.thresholdType ==1}" th:value="1"  th:text="时间">1</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>阈值</label>
+							<input name="thresholdValue" type="number" class="form-control"  th:value="${equip!=null}?${equip.thresholdValue}">
+						</div>
+						<button type="submit" class="btn btn-primary" th:text="修改"></button>
+					</form>
+				</main>
+			</div>
+		</div>
+
+		<!-- Bootstrap core JavaScript
+    ================================================== -->
+		<script type="text/javascript" src="/js/jquery-3.2.1.slim.min.js" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+		<script type="text/javascript" src="/js/popper.min.js" th:src="@{/js/popper.js}"></script>
+		<script type="text/javascript" src="/js/bootstrap.min.js" th:src="@{/js/bootstrap.js}"></script>
+
+		<!-- Icons -->
+		<script type="text/javascript" src="/js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+		<script>
+            feather.replace()
+		</script>
+
+	</body>
+
+</html>

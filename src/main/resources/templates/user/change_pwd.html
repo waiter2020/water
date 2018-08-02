@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>终端水系统</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+</head>
+
+<body>
+<!--引入抽取的topbar-->
+<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
+<div th:replace="commons/bar::topbar(title='修改密码')"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!--引入侧边栏-->
+        <div th:replace="commons/bar::#sidebar"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <!--需要区分是员工修改还是添加；-->
+            <h4 class="btn btn-sm btn-success" th:if="${msg}" th:text="${msg}"></h4>
+                                    <form role="form" th:action="@{/user/change_pwd}" method="post">
+                                        <div class="form-group">
+                                            <label>原密码</label>
+                                            <input name="oldPwd" class="form-control" type="password" id="oldPwd"  required>
+                                            <p class="help-block" id="meet"></p>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>新密码</label>
+                                            <input class="form-control" id="newPwd1" type="password" onchange="pwdMeet1()" required>
+                                            <p id="meet1"></p>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>再次输入新密码</label>
+                                            <input class="form-control" name="newPwd" id="newPwd2" type="password"  required>
+                                            <p id="meet2"></p>
+
+                                        </div>
+                                        <div style="margin-left: 37%">
+                                        <button type="submit" value="submit" onclick="pwdMeet2()" class="btn btn-sm btn-success">修改</button>
+                                        <button type="reset"  value="reset"  class="btn btn-sm btn-danger">重置</button>
+                                        </div>
+                                    </form>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<script type="text/javascript" src="/js/jquery-3.2.1.slim.min.js" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" src="/js/popper.min.js" th:src="@{/js/popper.js}"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js" th:src="@{/js/bootstrap.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="/js/feather.min.js" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace()
+</script>
+
+
+
+<script>
+    function pwdMeet2() {
+        var np1 = document.getElementById("newPdw1").value;
+        var np2 = document.getElementById("newPdw2").value;
+        if(np1==np2){
+            document.getElementById("meet2").innerText="";
+        }
+        else {
+            document.getElementById("meet2").innerText="两次新密码输入必须一致";
+        }
+    }
+</script>
+
+<!-- /. WRAPPER  -->
+<!-- JS Scripts-->
+<!-- jQuery Js -->
+
+
+<script th:src="@{/change_pwd.js}"></script>
+
+
+</body>
+
+</html>

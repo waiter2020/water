@@ -106,4 +106,19 @@ public class User implements UserDetails {
             this.birth=null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", passwd='" + passwd + '\'' +
+                ", birth=" + birth +
+                ", enabled=" + enabled +
+                ", family=" + family +
+                ", authorities=" + authorities +
+                '}';
+    }
 }

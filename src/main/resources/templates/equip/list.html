@@ -2,111 +2,146 @@
 <!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="">
-		<meta name="author" content="">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-		<title>终端水系统</title>
-		<!-- Bootstrap core CSS -->
-		<link  th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <title>终端水系统</title>
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 
-		<!-- Custom styles for this template -->
-		<link  th:href="@{/css/dashboard.css}" rel="stylesheet">
-		<style type="text/css">
-			/* Chart.js */
-			
-			@-webkit-keyframes chartjs-render-animation {
-				from {
-					opacity: 0.99
-				}
-				to {
-					opacity: 1
-				}
-			}
-			
-			@keyframes chartjs-render-animation {
-				from {
-					opacity: 0.99
-				}
-				to {
-					opacity: 1
-				}
-			}
-			
-			.chartjs-render-monitor {
-				-webkit-animation: chartjs-render-animation 0.001s;
-				animation: chartjs-render-animation 0.001s;
-			}
-		</style>
-	</head>
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
 
-	<body>
-		<!--引入抽取的topbar-->
-		<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
-		<div th:replace="commons/bar::topbar(title='设备控制台')"></div>
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
 
-		<div class="container-fluid">
-			<div class="row">
-				<!--引入侧边栏-->
-				<div th:replace="commons/bar::#sidebar(activeUri='equip')"></div>
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
 
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-					<h2><a class="btn btn-sm btn-success"  th:href="@{/equip/add}">添加设备</a></h2>
-					<h4 class="btn btn-sm btn-success" th:if="${equipmsg}" th:text="${equipmsg}"></h4>
-					<div class="table-responsive">
-						<table class="table table-striped table-sm">
-							<thead>
-								<tr>
-									<th>equipId</th>
-									<th>locLongitude</th>
-									<th>locLatitude</th>
-									<th>waterUsage</th>
-									<th>equipState</th>
-									<th>操作</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="equip:${equips}">
-									<td th:text="${equip.equipId}"></td>
-									<td th:text="${equip.locLongitude}"></td>
-									<td th:text="${equip.locLatitude}"></td>
-									<td th:text="${equip.waterUsage}"></td>
-									<td th:text="${equip.equipState}"></td>
-									<td>
-										<!--<a class="btn btn-sm btn-primary" th:href="@{/family/}+${user.id}">编辑</a>-->
-										<button th:if="${#request.getRemoteUser()}==${family.admin}" th:attr="del_uri=@{/equip/}+${equip.equipId}" class="btn btn-sm btn-danger deleteBtn">删除</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</main>
-				<form id="deleteEquipForm"  method="post">
-					<input type="hidden" name="_method" value="delete"/>
-				</form>
-			</div>
-		</div>
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+</head>
 
-		<!-- Bootstrap core JavaScript
-    ================================================== -->
-		<!-- Placed at the end of the document so the pages load faster -->
-		<script type="text/javascript"  th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
-		<script type="text/javascript"  th:src="@{/js/popper.min.js}"></script>
-		<script type="text/javascript"  th:src="@{/js/bootstrap.min.js}"></script>
+<body>
+<!--引入抽取的topbar-->
+<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
+<div th:replace="commons/bar::topbar(title='设备控制台')"></div>
 
-		<!-- Icons -->
-		<script type="text/javascript"  th:src="@{/js/feather.min.js}"></script>
-		<script>
-			feather.replace()
-		</script>
-		<script>
-			$(".deleteBtn").click(function(){
-			    //删除当前员工的
-			    $("#deleteEquipForm").attr("action",$(this).attr("del_uri")).submit();
-			    return false;
-            });
-		</script>
-	</body>
+<div class="container-fluid">
+    <div class="row">
+        <!--引入侧边栏-->
+        <div th:replace="commons/bar::#sidebar(activeUri='equip')"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <h2><a class="btn btn-sm btn-success" th:href="@{/equip/add}">添加设备</a></h2>
+            <h4 class="btn btn-sm btn-success" th:if="${equipmsg}" th:text="${equipmsg}"></h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>经度</th>
+                        <th>纬度</th>
+                        <th>总用水量(升)</th>
+                        <th>状态</th>
+                        <th>检漏模式</th>
+                        <th>阈值类型</th>
+                        <th>阈值大小</th>
+                        <!--<th>阀门开关</th>-->
+                        <th>在线状态</th>
+                        <th>电量</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="equip:${equips}">
+                        <td th:text="${equip.equipId}"></td>
+                        <td th:text="${equip.locLongitude}"></td>
+                        <td th:text="${equip.locLatitude}"></td>
+                        <td th:text="${equip.waterUsage}"></td>
+                        <div th:if="${equip.isOpen()}" th:switch="${equip.equipState}">
+                            <td th:case="0" th:text="正常"></td>
+                            <td th:case="1" th:text="小漏失"></td>
+                            <td th:case="2" th:text="大漏失"></td>
+                            <td th:case="5" th:text="正常 "></td>
+                        </div>
+                        <td th:if="${!equip.isOpen()}">关总阀</td>
+                        <div th:switch="${equip.model}">
+                            <td th:case="0" th:text="大漏失、小漏失都检测"></td>
+                            <td th:case="1" th:text="只检测小漏"></td>
+                            <td th:case="2" th:text="表示只检测大漏失"></td>
+                            <td th:case="3" th:text="表示大小漏失都不检测 "></td>
+                        </div>
+                        <td th:text="${equip.thresholdType==0?'流量':'时间'}"></td>
+                        <td th:text="${equip.thresholdValue}"></td>
+                        <!--<td th:text="${equip.equipState}"></td>-->
+                        <!--<td th:text="${equip.isOpen()?'开启':'关闭'}"></td>-->
+                        <td th:text="${equip.online==true?'在线':'离线'}"></td>
+                        <td th:text="${equip.lowQuantityOfElectricity==true?'低电量':'正常'}"></td>
+                        <td>
+                                        <span th:if="${equip.online==true}">
+                                        <a th:href="@{/equip/change/}+${equip.equipId}" class="btn btn-sm btn-success">修改参数</a>
+											<a th:href="@{/equip/getdata/}+${equip.equipId}"
+                                               class="btn btn-sm btn-success">上传数据</a>
+                                        <a th:href="@{/equip/open_close/}+${equip.equipId}"
+                                           class="btn btn-sm btn-success" th:text="${equip.isOpen()?'关闭阀门':'开启阀门'}"></a>
+                                        <a th:href="@{/equip/restart/}+${equip.equipId}" class="btn btn-sm btn-success">重启</a>
+                                        </span>
+                            <!--<a class="btn btn-sm btn-primary" th:href="@{/family/}+${user.id}">编辑</a>-->
+                            <button th:if="${#request.getRemoteUser()}==${family.admin}"
+                                    th:attr="del_uri=@{/equip/}+${equip.equipId}"
+                                    class="btn btn-sm btn-danger deleteBtn">删除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+        <form id="deleteEquipForm" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace()
+</script>
+<script>
+    $(".deleteBtn").click(function () {
+        //删除当前员工的
+        $("#deleteEquipForm").attr("action", $(this).attr("del_uri")).submit();
+        return false;
+    });
+</script>
+</body>
 </html>

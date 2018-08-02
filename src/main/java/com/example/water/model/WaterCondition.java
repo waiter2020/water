@@ -20,7 +20,7 @@ public class WaterCondition {
 	private long id;
 	private String watermeterId;
 
-	private int volumn;
+	private double volumn;
 	private long timeUse;
 	private Date startDate;
 	private Date endDate;
@@ -29,7 +29,7 @@ public class WaterCondition {
 	}
 
 
-	public WaterCondition(String watermeterId, int volumn, long timeUse, Date startDate, Date endDate) {
+	public WaterCondition(String watermeterId, double volumn, long timeUse, Date startDate, Date endDate) {
 		this.watermeterId = watermeterId;
 		this.volumn = volumn;
 		this.timeUse = timeUse;

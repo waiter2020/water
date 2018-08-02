@@ -6,10 +6,18 @@ package com.example.water.socket;
  * @author waiter
  */
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import com.example.water.model.EquipmentInfo;
+import com.example.water.service.EquipmentInfoService;
+import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +36,11 @@ public class TCPServer {
     @Qualifier("tcpSocketAddress")
     private InetSocketAddress tcpPort;
 
+    @Autowired
+    private Service service;
+    @Autowired
+    private EquipmentInfoService equipmentInfoService;
+
     private ChannelFuture serverChannelFuture;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -36,11 +49,20 @@ public class TCPServer {
     public void start() throws Exception {
         logger.info("Starting server at " + tcpPort);
         serverChannelFuture = b.bind(tcpPort).sync();
+        ArrayList<EquipmentInfo> all = equipmentInfoService.findAll();
+        for (EquipmentInfo a:all){
+            a.setOnline(false);
+            a.setLoginId(null);
+        }
+        equipmentInfoService.saveAll(all);
     }
 
     @PreDestroy
     public void stop() throws Exception {
-
+        ConcurrentHashMap<String, Channel> map = OnlineDevices.getMap();
+        for (Map.Entry<String, Channel> stringChannelEntry : map.entrySet()) {
+            service.logout(stringChannelEntry.getValue());
+        }
         serverChannelFuture.channel().closeFuture().sync();
     }
 

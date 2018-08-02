@@ -23,7 +23,7 @@ public class WaterConditionService {
     @Autowired
     private WaterConditionDao waterConditionDao;
 
-    public void saveWaterInfo(String watermeterId, Date startDate, Date endDate, int volumn){
+    public void saveWaterInfo(String watermeterId, Date startDate, Date endDate, double volumn){
         waterConditionDao.save(new WaterCondition(watermeterId,volumn,endDate.getTime()-startDate.getTime(), startDate,endDate));
     }
 

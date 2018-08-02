@@ -7,7 +7,7 @@
 <body>
 <!--topbar-->
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0" th:fragment="topbar" id="topbarid">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">[[${#httpServletRequest.remoteUser}]]</a>
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" th:href="@{/info}">[[${#httpServletRequest.remoteUser}]]</a>
     <!--<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">-->
     <h1 class="h1 right  bar-title"  th:text="${title}"></h1>
     <ul class="navbar-nav px-3">

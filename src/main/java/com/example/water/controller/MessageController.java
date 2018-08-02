@@ -7,6 +7,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServlet;
@@ -19,7 +20,7 @@ import java.util.Date;
  * Created by  waiter on 18-6-18.
  * @author waiter
  */
-@Controller
+@RestController
 public class MessageController {
 
     @MessageMapping("/hello")

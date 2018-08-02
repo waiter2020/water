@@ -85,7 +85,7 @@
 									<td th:text="${user.username}"></td>
 									<td th:text="${user.email}"></td>
 									<td th:text="${user.phoneNumber}"></td>
-									<td th:text="${#dates.format(user.birth, 'yyyy-MM-dd HH:mm')}"></td>
+									<td th:text="${#dates.format(user.birth, 'yyyy-MM-dd')}"></td>
 									<td>
 										<!--<a class="btn btn-sm btn-primary" th:href="@{/family/}+${user.id}">编辑</a>-->
 										<div th:if="${#request.getRemoteUser()}==${family.admin}">

@@ -99,10 +99,10 @@
 
                 <ul class="navbar-nav px-3">
                     <li class="nav-item text-nowrap">
-                        <button class="btn btn-sm btn-success nextBtn" th:if="${page.getPageable().getPageNumber()!=0}" th:attr="del_uri=@{/water/}" >首页</button>&nbsp;&nbsp;
-                        <button class="btn btn-sm btn-success nextBtn" th:if="${page.getPageable().getPageNumber()!=0}" th:attr="del_uri=@{/water/}+${page.getPageable().getPageNumber()-1}" >上一页 </button>&nbsp;&nbsp;
-                        <button class="btn btn-sm btn-success nextBtn" th:if="${page.getPageable().getPageNumber()}!=${page.getTotalPages()-1}" th:attr="del_uri=@{/water/}+${page.getPageable().getPageNumber()+1}" >下一页 </button>&nbsp;&nbsp;
-                        <button class="btn btn-sm btn-success nextBtn" th:if="${page.getPageable().getPageNumber()}!=${page.getTotalPages()-1}" th:attr="del_uri=@{/water/}+${page.getTotalPages()-1}">末页</button>&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-success nextBtn" th:disabled="${page.getPageable().getPageNumber()==0}?'disabled'" th:attr="del_uri=@{/water/}" >首页</button>&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-success nextBtn" th:disabled="${page.getPageable().getPageNumber()==0}?'disabled'" th:attr="del_uri=@{/water/}+${page.getPageable().getPageNumber()-1}" >上一页 </button>&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-success nextBtn" th:disabled="(${page.getPageable().getPageNumber()}==${page.getTotalPages()-1})?'disabled'" th:attr="del_uri=@{/water/}+${page.getPageable().getPageNumber()+1}" >下一页 </button>&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-success nextBtn" th:disabled="(${page.getPageable().getPageNumber()}==${page.getTotalPages()-1})?'disabled'" th:attr="del_uri=@{/water/}+${page.getTotalPages()-1}">末页</button>&nbsp;&nbsp;
                         <span th:text="'当前 '+${page.getPageable().getPageNumber()+1}+'/'+${page.getTotalPages()}+' 页'"></span>     &nbsp;&nbsp;
                     </li>
                 </ul>

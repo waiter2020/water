@@ -24,4 +24,6 @@ public interface EquipmentInfoDao extends CrudRepository<EquipmentInfo,Long> {
      * @return
      */
     LinkedList<EquipmentInfo> findAllByFamily_Id(int id);
+
+    EquipmentInfo findByLoginId(String loginId);
 }
