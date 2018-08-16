@@ -45,6 +45,20 @@ spring:
       date-format: yyyy-MM-dd HH:mm:ss
   mvc:
     date-format: yyyy-MM-dd'T'HH:mm
+  mail:
+    port: 587
+    username: 1403976416@qq.com
+    password: torkcvokxfuugfaf
+    protocol: smtp
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    properties:
+    - name: mail.smtp.socketFactory.class
+      value: javax.net.ssl.SSLSocketFactory
+    - name: mail.smtp.ssl.enable
+      value: true
+    - name: mail.smtp.ssl.socketFactory
+      value: sf
 server:
   port: 8081
 app:

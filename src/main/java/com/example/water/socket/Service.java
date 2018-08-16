@@ -5,6 +5,7 @@ import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Log;
 import com.example.water.service.EquipmentInfoService;
 import com.example.water.service.LogService;
+import com.example.water.service.MailClientService;
 import com.example.water.service.WaterConditionService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -31,6 +32,8 @@ public class Service {
     private WaterConditionService waterConditionService;
     @Autowired
     private LogService logService;
+    @Autowired
+    private MailClientService mailClientService;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
 
@@ -43,7 +46,7 @@ public class Service {
         String equipId = msg.substring(1, 4);
         log.info("equipId:" + equipId);
         onlineDevices.addDevice(ctx.channel());
-        logService.save(new Log(Integer.parseInt(equipId),"连接",new Date()));
+        logService.save(new Log(equipId,"连接",new Date()));
         log.info(onlineDevices.getSize() + "");
 
         respond(ctx.channel(), equipId);
@@ -51,7 +54,8 @@ public class Service {
         EquipmentInfo equipmentByEquipId = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentByEquipId == null) {
             equipmentByEquipId = new EquipmentInfo();
-            equipmentByEquipId.setEquipId(Integer.parseInt(equipId));
+            equipmentByEquipId.setName("未命名");
+            equipmentByEquipId.setEquipId(equipId);
             equipmentByEquipId.setOpen(false);
             equipmentByEquipId.setModel(0);
             equipmentByEquipId.setEndStateTime(new Date());
@@ -99,6 +103,7 @@ public class Service {
         logService.save(new Log(byLoginId.getEquipId(),"断开连接",new Date()));
         onlineDevices.removeDevice(channel.id().asLongText());
         equipmentInfoService.save(byLoginId);
+        mailClientService.sendWarnMessage(byLoginId,"漏控仪断开连接");
     }
 
 
@@ -139,6 +144,7 @@ public class Service {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                mailClientService.sendWarnMessage(byLoginId,"漏控仪检测到小漏失");
                 break;
             /**
              * 大漏
@@ -153,6 +159,7 @@ public class Service {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                mailClientService.sendWarnMessage(byLoginId,"漏控仪检测到大漏失");
                 break;
             /**
              * 低电量
@@ -161,6 +168,7 @@ public class Service {
                 logService.save(new Log(byLoginId.getEquipId(),"低电量",new Date()));
                 byLoginId.setLowQuantityOfElectricity(true);
                 byLoginId.setEndStateTime(new Date());
+                mailClientService.sendWarnMessage(byLoginId,"漏控仪电量低");
                 break;
             case '5':
                 logService.save(new Log(byLoginId.getEquipId(),"停止用水",new Date()));
@@ -173,7 +181,7 @@ public class Service {
                         e.printStackTrace();
                     }
                     byLoginId.setWaterUsage(byLoginId.getWaterUsage()+volumn/100);
-                    waterConditionService.saveWaterInfo(Integer.toString(byLoginId.getEquipId()), byLoginId.getEndStateTime(), endTime, volumn / 100);
+                    waterConditionService.saveWaterInfo(byLoginId.getEquipId(), byLoginId.getEndStateTime(), endTime, volumn / 100);
                 }
                 byLoginId.setEquipState(5);
                 byLoginId.setEndStateTime(new Date());

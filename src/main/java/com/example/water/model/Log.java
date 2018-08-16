@@ -19,12 +19,12 @@ public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private int equipId;
+    private String equipId;
     private String description;
     private Date date;
     public Log(){}
 
-    public Log(int equipId, String description, Date date) {
+    public Log(String equipId, String description, Date date) {
         this.equipId = equipId;
         this.description = description;
         this.date = date;

@@ -18,10 +18,10 @@ public class EquipmentInfoService {
     private EquipmentInfoDao equipmentInfoDao;
 
     public void saveEquipmentInfo(String equipId,int waterUsage, int equipState){
-        equipmentInfoDao.save(new EquipmentInfo(Integer.parseInt(equipId),waterUsage,equipState));
+        equipmentInfoDao.save(new EquipmentInfo(equipId,waterUsage,equipState));
     }
     public EquipmentInfo getEquipmentByEquipId(String equipId){
-        return equipmentInfoDao.getFirstByEquipId(Integer.parseInt(equipId));
+        return equipmentInfoDao.getFirstByEquipId(equipId);
     }
 
     public EquipmentInfo findByLoginId(String loginId){

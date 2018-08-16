@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private List<Role> authorities ;
 
 
-    User(){}
+    public User(){}
 
     public User(String username,String email,String phoneNumber, String passwd, boolean enabled) {
         this.username = username;

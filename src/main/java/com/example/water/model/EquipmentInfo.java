@@ -17,7 +17,8 @@ public class EquipmentInfo {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-	private int equipId;
+	private String equipId;
+	private String name;
     /**
      * 阈门开关
      */
@@ -63,7 +64,7 @@ public class EquipmentInfo {
 		// TODO Auto-generated constructor stub
 	}
 
-    public EquipmentInfo(int equipId, double locLongitude, double locLatitude, int waterUsage, int equipState) {
+    public EquipmentInfo(String equipId, double locLongitude, double locLatitude, int waterUsage, int equipState) {
         this.equipId = equipId;
         this.locLongitude = locLongitude;
         this.locLatitude = locLatitude;
@@ -71,18 +72,18 @@ public class EquipmentInfo {
         this.equipState = equipState;
     }
 
-    public EquipmentInfo(int equipId, int waterUsage, int equipState) {
+    public EquipmentInfo(String equipId, int waterUsage, int equipState) {
         this.equipId = equipId;
         this.waterUsage = waterUsage;
         this.equipState = equipState;
     }
 
-
     @Override
     public String toString() {
         return "EquipmentInfo{" +
                 "id=" + id +
-                ", equipId=" + equipId +
+                ", equipId='" + equipId + '\'' +
+                ", name='" + name + '\'' +
                 ", isOpen=" + isOpen +
                 ", thresholdType=" + thresholdType +
                 ", thresholdValue=" + thresholdValue +

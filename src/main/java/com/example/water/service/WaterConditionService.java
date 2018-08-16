@@ -32,7 +32,7 @@ public class WaterConditionService {
         return DataUtils.createJsonString(waterConditionDao.getWaterConditionsByWatermeterIdAndStartDateAfterAndEndDateBeforeOrderByStartDateDesc(pageable,watermeterId,startTime,endTime));
     }
     public Page<WaterCondition> getWaterInfosByDate(int page,String watermeterId, Date startTime, Date endTime){
-        Pageable pageable = PageRequest.of(page, 5);
+        Pageable pageable = PageRequest.of(page, 20);
         return waterConditionDao.findAllByWatermeterIdAndAndStartDateAfterAndEndDateBeforeOrderByStartDate(pageable,watermeterId,startTime,endTime);
     }
     public ArrayList<WaterCondition> findAll(){

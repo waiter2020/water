@@ -89,7 +89,7 @@
 									<td>
 										<!--<a class="btn btn-sm btn-primary" th:href="@{/family/}+${user.id}">编辑</a>-->
 										<div th:if="${#request.getRemoteUser()}==${family.admin}">
-										<button th:if="${#request.getRemoteUser()}!=${user.getUsername()}"  th:attr="del_uri=@{/family/}+${user.id}" class="btn btn-sm btn-danger deleteBtn">删除</button>
+										<a th:if="${#request.getRemoteUser()}!=${user.getUsername()}" onclick="return f('你确定要移除此人吗？')" th:attr="del_uri=@{/family/}+${user.id}" class="btn btn-sm btn-danger deleteBtn">删除</a>
 										</div>
 									</td>
 								</tr>

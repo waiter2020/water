@@ -19,7 +19,9 @@ public class OnlineDevices {
     }
 
     public void removeDevice(String Id){
-        map.remove(Id);
+        if (!map.isEmpty()) {
+            map.remove(Id);
+        }
     }
 
     public void removeAll(){

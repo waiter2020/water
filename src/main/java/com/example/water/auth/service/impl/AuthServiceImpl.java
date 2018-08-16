@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 
@@ -63,6 +64,7 @@ public class AuthServiceImpl implements AuthService {
         roles.add(new Role("USER"));
         userToAdd.setAuthorities(roles);
         userToAdd.setEnabled(true);
+        userToAdd.setBirth(new Date());
         return userRepository.save(userToAdd);
 
     }

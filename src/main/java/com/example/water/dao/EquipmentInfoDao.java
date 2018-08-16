@@ -16,7 +16,7 @@ public interface EquipmentInfoDao extends CrudRepository<EquipmentInfo,Long> {
      * @param equipId
      * @return
      */
-    EquipmentInfo getFirstByEquipId(int equipId);
+    EquipmentInfo getFirstByEquipId(String equipId);
 
     /**
      * 通过家庭组id查找设备

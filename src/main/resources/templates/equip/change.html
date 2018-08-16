@@ -63,6 +63,10 @@
 						-->
 						<input type="hidden" name="equipId" th:if="${equip!=null}" th:value="${equip.equipId}">
 						<div class="form-group">
+							<label>名称</label>
+							<input name="name" type="text" class="form-control"  th:value="${equip!=null}?${equip.name}">
+						</div>
+						<div class="form-group">
 							<label>纬度</label>
 							<input name="locLatitude" type="number" class="form-control"  th:value="${equip!=null}?${equip.locLatitude}">
 						</div>

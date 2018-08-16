@@ -10,10 +10,9 @@
 
     <title>终端水系统</title>
     <!-- Bootstrap core CSS -->
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link href="/css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
     <style type="text/css">
         /* Chart.js */
 
@@ -60,6 +59,7 @@
                     <thead>
                     <tr>
                         <th>编号</th>
+                        <th>名称</th>
                         <th>经度</th>
                         <th>纬度</th>
                         <th>总用水量(升)</th>
@@ -68,7 +68,7 @@
                         <th>阈值类型</th>
                         <th>阈值大小</th>
                         <!--<th>阀门开关</th>-->
-                        <th>在线状态</th>
+                        <!--<th>在线状态</th>-->
                         <th>电量</th>
                         <th>操作</th>
                     </tr>
@@ -76,42 +76,47 @@
                     <tbody>
                     <tr th:each="equip:${equips}">
                         <td th:text="${equip.equipId}"></td>
+                        <td th:text="${equip.name}"></td>
                         <td th:text="${equip.locLongitude}"></td>
                         <td th:text="${equip.locLatitude}"></td>
                         <td th:text="${equip.waterUsage}"></td>
-                        <div th:if="${equip.isOpen()}" th:switch="${equip.equipState}">
+                        <div th:if="${equip.online==true}">
+                        <div th:if="${equip.isOpen()||equip.equipState==1||equip.equipState==2}" th:switch="${equip.equipState}">
                             <td th:case="0" th:text="正常"></td>
                             <td th:case="1" th:text="小漏失"></td>
                             <td th:case="2" th:text="大漏失"></td>
                             <td th:case="5" th:text="正常 "></td>
                         </div>
-                        <td th:if="${!equip.isOpen()}">关总阀</td>
+                        <td th:if="${!equip.isOpen()&&equip.equipState!=1&&equip.equipState!=2}">关总阀</td>
+                        </div>
+                        <td th:if="${equip.online==false}" th:text="离线"></td>
                         <div th:switch="${equip.model}">
                             <td th:case="0" th:text="大漏失、小漏失都检测"></td>
                             <td th:case="1" th:text="只检测小漏"></td>
-                            <td th:case="2" th:text="表示只检测大漏失"></td>
-                            <td th:case="3" th:text="表示大小漏失都不检测 "></td>
+                            <td th:case="2" th:text="只检测大漏失"></td>
+                            <td th:case="3" th:text="大小漏失都不检测 "></td>
                         </div>
                         <td th:text="${equip.thresholdType==0?'流量':'时间'}"></td>
                         <td th:text="${equip.thresholdValue}"></td>
                         <!--<td th:text="${equip.equipState}"></td>-->
                         <!--<td th:text="${equip.isOpen()?'开启':'关闭'}"></td>-->
-                        <td th:text="${equip.online==true?'在线':'离线'}"></td>
+
                         <td th:text="${equip.lowQuantityOfElectricity==true?'低电量':'正常'}"></td>
                         <td>
                                         <span th:if="${equip.online==true}">
-                                        <a th:href="@{/equip/change/}+${equip.equipId}" class="btn btn-sm btn-success">修改参数</a>
 											<a th:href="@{/equip/getdata/}+${equip.equipId}"
                                                class="btn btn-sm btn-success">上传数据</a>
                                         <a th:href="@{/equip/open_close/}+${equip.equipId}"
                                            class="btn btn-sm btn-success" th:text="${equip.isOpen()?'关闭阀门':'开启阀门'}"></a>
                                         <a th:href="@{/equip/restart/}+${equip.equipId}" class="btn btn-sm btn-success">重启</a>
                                         </span>
+                            <a th:href="@{/equip/change/}+${equip.equipId}" class="btn btn-sm btn-success">修改参数</a>
                             <!--<a class="btn btn-sm btn-primary" th:href="@{/family/}+${user.id}">编辑</a>-->
-                            <button th:if="${#request.getRemoteUser()}==${family.admin}"
+                            <a th:if="${#request.getRemoteUser()}==${family.admin}"
                                     th:attr="del_uri=@{/equip/}+${equip.equipId}"
-                                    class="btn btn-sm btn-danger deleteBtn">删除
-                            </button>
+                                    onclick="return f('你确定要解绑此设备吗？')"
+                                    class="btn btn-sm btn-danger deleteBtn">解绑
+                            </a>
                         </td>
                     </tr>
                     </tbody>
@@ -142,6 +147,17 @@
         $("#deleteEquipForm").attr("action", $(this).attr("del_uri")).submit();
         return false;
     });
+</script>
+<script>
+    function f(a) {
+        if(window.confirm(a)){
+            //alert("确定");
+            return true;
+        }else{
+            //alert("取消");
+            return false;
+        }
+    }
 </script>
 </body>
 </html>

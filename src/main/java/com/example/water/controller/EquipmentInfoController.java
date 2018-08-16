@@ -121,15 +121,15 @@ public class EquipmentInfoController {
     @GetMapping(value = "/equip/change/{id}")
     public String toChangeEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
-        if (equipmentById.isOnline()) {
-            User byUserName = (User) userDetailsServiceIml.findByUserName(request.getRemoteUser());
-            if (byUserName.getFamily().getId() != equipmentById.getFamily().getId()) {
-                return equip(model, request);
-            }
-            model.addAttribute("equip", equipmentById);
-        } else {
-            model.addAttribute("equipmsg", "设备已离线");
+
+        User byUserName = (User) userDetailsServiceIml.findByUserName(request.getRemoteUser());
+        if (byUserName.getFamily().getId() != equipmentById.getFamily().getId()) {
+            return equip(model, request);
         }
+        model.addAttribute("equip", equipmentById);
+
+        model.addAttribute("equipmsg", "设备已离线");
+
         return "equip/change";
     }
 
@@ -140,24 +140,25 @@ public class EquipmentInfoController {
         String locLongitude = request.getParameter("locLongitude");
         String thresholdType = request.getParameter("thresholdType");
         String thresholdValue = request.getParameter("thresholdValue");
+        String name = request.getParameter("name");
         String model1 = request.getParameter("model");
 
 
         EquipmentInfo equipmentByEquipId = equipmentInfoService.getEquipmentByEquipId(equipId);
+        equipmentByEquipId.setLocLatitude(Double.parseDouble(locLatitude));
+        equipmentByEquipId.setLocLongitude(Double.parseDouble(locLongitude));
+        equipmentByEquipId.setThresholdType(Integer.parseInt(thresholdType));
+        equipmentByEquipId.setThresholdValue(Integer.parseInt(thresholdValue));
+        equipmentByEquipId.setModel(Integer.parseInt(model1));
+        equipmentByEquipId.setName(name);
         if (equipmentByEquipId.isOnline()) {
-            equipmentByEquipId.setLocLatitude(Double.parseDouble(locLatitude));
-            equipmentByEquipId.setLocLongitude(Double.parseDouble(locLongitude));
-            equipmentByEquipId.setThresholdType(Integer.parseInt(thresholdType));
-            equipmentByEquipId.setThresholdValue(Integer.parseInt(thresholdValue));
-            equipmentByEquipId.setModel(Integer.parseInt(model1));
 
             service.setThresholdValue(equipmentByEquipId.getLoginId(), equipmentByEquipId.getEquipId() + "", equipmentByEquipId.getThresholdValue() + "", equipmentByEquipId.getThresholdType());
             service.setModel(equipmentByEquipId.getLoginId(), equipmentByEquipId.getEquipId() + "", equipmentByEquipId.getModel());
             equipmentInfoService.save(equipmentByEquipId);
-            model.addAttribute("equipmsg", "修改成功");
-        } else {
-            model.addAttribute("equipmsg", "设备已离线");
+
         }
+        model.addAttribute("equipmsg", "修改成功");
         return equip(model, request);
     }
 
@@ -166,9 +167,9 @@ public class EquipmentInfoController {
     public String openOrCloseEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
-        equipmentById.setOpen(!equipmentById.isOpen());
-        service.openOrClose(equipmentById.getLoginId(), equipmentById.getEquipId() + "", equipmentById.isOpen());
-        equipmentInfoService.save(equipmentById);
+            equipmentById.setOpen(!equipmentById.isOpen());
+            service.openOrClose(equipmentById.getLoginId(), equipmentById.getEquipId() + "", equipmentById.isOpen());
+            equipmentInfoService.save(equipmentById);
         } else {
             model.addAttribute("equipmsg", "设备已离线");
         }
@@ -179,8 +180,8 @@ public class EquipmentInfoController {
     public String getData(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
-            service.getData(equipmentById.getLoginId(),equipmentById.getEquipId()+"");
-            model.addAttribute("equipmsg","请求已发送");
+            service.getData(equipmentById.getLoginId(), equipmentById.getEquipId() + "");
+            model.addAttribute("equipmsg", "请求已发送");
         } else {
             model.addAttribute("equipmsg", "设备已离线");
         }

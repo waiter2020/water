@@ -84,7 +84,7 @@ public class WaterConditionController extends HttpServlet {
         return get(model,request);
     }
 
-    @GetMapping(value = "water")
+    @GetMapping(value = "/water")
     public String get(Model model,HttpServletRequest request){
         String remoteUser = request.getRemoteUser();
         User byUserName = (User) userDetailsServiceIml.findByUserName(remoteUser);
