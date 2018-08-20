@@ -2,6 +2,7 @@ package com.example.water.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -12,6 +13,7 @@ import org.thymeleaf.context.Context;
  * @author waiter
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class MailContentBuilder {
     private TemplateEngine templateEngine;
 

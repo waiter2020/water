@@ -7,12 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.LinkedList;
 
 
@@ -56,6 +57,7 @@ public class RegController {
             roles.add(new Role("USER"));
             //保存用户，对密码加密
             user=new User(username, phone,email, bCryptPasswordEncoder.encode(passwd), true,roles);
+            user.setBirth(new Date());
             userDetailsServiceIml.add(user);
         }catch (Exception e){
 

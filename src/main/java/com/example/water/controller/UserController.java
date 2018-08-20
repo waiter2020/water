@@ -5,6 +5,7 @@ import com.example.water.service.UserDetailsServiceIml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -83,6 +84,7 @@ public class UserController {
         return "user/change_pwd";
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping(value = "/user/change_pwd")
     public String ChangePwd(Model model,HttpServletRequest request){
         String oldPwd = request.getParameter("oldPwd");

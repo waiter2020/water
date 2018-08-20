@@ -12,6 +12,7 @@ import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import java.util.Date;
  * @author waiter
  */
 @org.springframework.stereotype.Service
+@Transactional(rollbackFor = Exception.class)
 public class Service {
     @Autowired
     private OnlineDevices onlineDevices;

@@ -4,6 +4,7 @@ import com.example.water.dao.EquipmentInfoDao;
 import com.example.water.model.EquipmentInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -13,6 +14,7 @@ import java.util.LinkedList;
  * @author waiter
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class EquipmentInfoService {
     @Autowired
     private EquipmentInfoDao equipmentInfoDao;

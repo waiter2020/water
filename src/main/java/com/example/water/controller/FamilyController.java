@@ -109,8 +109,7 @@ public class FamilyController {
         if(byUserName.getFamily()!=null){
             return "redirect:/family";
         }
-        familyService.save(family);
-        family=familyService.findByAdmin(byUserName.getUsername());
+        family=familyService.save(family);
         byUserName.setFamily(family);
         userDetailsServiceIml.save(byUserName);
         model.addAttribute("familymsg","创建家庭组成功，快邀请成员加入吧");

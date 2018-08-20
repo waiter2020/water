@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 
@@ -20,6 +21,7 @@ import java.util.LinkedList;
  * @author waiter
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 @Configuration
 public class MailClientService {
     @Autowired

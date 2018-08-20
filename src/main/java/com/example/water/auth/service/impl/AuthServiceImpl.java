@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -28,6 +29,7 @@ import java.util.LinkedList;
  * 验证服务
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class AuthServiceImpl implements AuthService {
 
     private AuthenticationManager authenticationManager;

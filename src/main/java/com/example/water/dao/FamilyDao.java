@@ -17,4 +17,6 @@ public interface FamilyDao extends CrudRepository<Family,Integer> {
     Family findById(int id);
     Family findByAdmin(String admin);
     void removeById(int id);
+    @Override
+    Family save(Family family);
 }

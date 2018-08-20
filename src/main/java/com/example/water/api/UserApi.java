@@ -6,11 +6,15 @@ import com.example.water.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by  waiter on 18-8-7  下午9:54.
@@ -22,11 +26,47 @@ import javax.servlet.http.HttpServletRequest;
 public class UserApi {
     @Autowired
     UserDetailsServiceIml userDetailsServiceIml;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping(value = "/get_info")
     public User getUser(HttpServletRequest request){
         UserDetails user = (UserDetails) request.getSession().getAttribute("user");
         User userName = (User) userDetailsServiceIml.findByUserName(user.getUsername());
         return userName;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping(value = "/change")
+    public String changeInfo(@RequestBody Map<String,String> map, HttpServletRequest request){
+        String phoneNumber = map.get("phoneNumber");
+        String email = map.get("email");
+        String births = map.get("birth");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        Date parse=null;
+        try {
+            parse = simpleDateFormat.parse(births);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        UserDetails user = (UserDetails) request.getSession().getAttribute("user");
+        User byUserName = (User) userDetailsServiceIml.findByUserName(user.getUsername());
+
+        byUserName.setBirth(parse);
+        byUserName.setPhoneNumber(phoneNumber);
+        byUserName.setEmail(email);
+        userDetailsServiceIml.save(byUserName);
+        return "修改成功";
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping(value = "/change_pwd")
+    public String ChangePwd(@RequestBody Map<String,String> map,HttpServletRequest request){
+        UserDetails user = (UserDetails) request.getSession().getAttribute("user");
+        User byUserName = (User) userDetailsServiceIml.findByUserName(user.getUsername());
+        String newPwd = map.get("pwd");
+        byUserName.setPasswd(bCryptPasswordEncoder.encode(newPwd));
+        userDetailsServiceIml.save(byUserName);
+        return "修改成功";
     }
 }

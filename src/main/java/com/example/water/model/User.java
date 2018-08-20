@@ -1,5 +1,6 @@
 package com.example.water.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,6 +24,7 @@ public class User implements UserDetails {
     private String username;
     private String phoneNumber;
     private String email;
+    @JsonIgnore
     private String passwd;
     /**
      *     生日

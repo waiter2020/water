@@ -1,7 +1,9 @@
 package com.example.water.api;
 
+import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Family;
 import com.example.water.model.User;
+import com.example.water.service.EquipmentInfoService;
 import com.example.water.service.FamilyService;
 import com.example.water.service.UserDetailsServiceIml;
 import org.slf4j.Logger;
@@ -29,6 +31,8 @@ public class FamilyApi {
     UserDetailsServiceIml userDetailsServiceIml;
     @Autowired
     private FamilyService familyService;
+    @Autowired
+    private EquipmentInfoService equipmentInfoService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(value = "/family")
@@ -75,6 +79,66 @@ public class FamilyApi {
         byUserName.setFamily(user.getFamily());
         userDetailsServiceIml.save(byUserName);
         return null;
+    }
+
+    @PostMapping(value = "/delete_user")
+    public String deleteUser(@RequestBody Map<String,String> map,HttpServletRequest request){
+        UserDetails user1 = (UserDetails) request.getSession().getAttribute("user");
+        String id = map.get("id");
+        User byUserName = (User) userDetailsServiceIml.findByUserName(user1.getUsername());
+        User user = userDetailsServiceIml.findById(Integer.parseInt(id));
+
+        user.setFamily(null);
+        logger.info("从家庭组里移除了"+user.getUsername());
+        userDetailsServiceIml.save(user);
+        return "成功从家庭组里移除了";
+    }
+
+    @Transactional
+    @PostMapping(value = "/remove")
+    public String remove(HttpServletRequest request) throws Exception {
+        UserDetails user1 = (UserDetails) request.getSession().getAttribute("user");
+        User byUserName = (User) userDetailsServiceIml.findByUserName(user1.getUsername());
+        if (byUserName.getFamily().getAdmin().equals(byUserName.getUsername())) {
+
+            try {
+                LinkedList<User> allByFamilyId = userDetailsServiceIml.findAllByFamilyId(byUserName.getFamily().getId());
+
+                logger.warn(byUserName + "解散了家庭组" + byUserName.getFamily());
+
+                int id = byUserName.getFamily().getId();
+                for (User a :
+                        allByFamilyId) {
+                    a.setFamily(null);
+                }
+                userDetailsServiceIml.saveAll(allByFamilyId);
+
+                LinkedList<EquipmentInfo> byFamilyId = equipmentInfoService.findAllByFamily_Id(id);
+                for (EquipmentInfo a :
+                        byFamilyId) {
+                    a.setFamily(null);
+                }
+                equipmentInfoService.saveAll(byFamilyId);
+                familyService.remove(id);
+                return "成功解散家庭组";
+            } catch (Exception e) {
+
+                throw new Exception();
+            }
+        }else {
+            logger.warn("用户"+byUserName+"尝试非法解散群组");
+            return "无权操作";
+        }
+    }
+
+    @PostMapping(value = "/exit")
+    public String exit(HttpServletRequest request){
+        UserDetails user1 = (UserDetails) request.getSession().getAttribute("user");
+        User byUserName = (User) userDetailsServiceIml.findByUserName(user1.getUsername());
+        logger.warn("用户"+byUserName+"退出了家庭组"+byUserName.getFamily());
+        byUserName.setFamily(null);
+        userDetailsServiceIml.save(byUserName);
+        return "成功退出家庭组";
     }
 
 }

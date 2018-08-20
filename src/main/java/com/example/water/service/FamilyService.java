@@ -4,6 +4,7 @@ import com.example.water.dao.FamilyDao;
 import com.example.water.model.Family;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by  waiter on 18-6-18.
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
  * @author waiter
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class FamilyService {
     @Autowired
     FamilyDao familyDao;
@@ -24,8 +26,8 @@ public class FamilyService {
         return familyDao.findById(id);
     }
 
-    public void save(Family family){
-        familyDao.save(family);
+    public Family save(Family family){
+        return familyDao.save(family);
     }
 
     public Family findByAdmin(String admin){

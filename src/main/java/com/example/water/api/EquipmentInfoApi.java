@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.SessionScope;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.Map;
 
