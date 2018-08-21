@@ -3,10 +3,7 @@ package com.example.water.socket;
 import com.example.water.WaterApplication;
 import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Log;
-import com.example.water.service.EquipmentInfoService;
-import com.example.water.service.LogService;
-import com.example.water.service.MailClientService;
-import com.example.water.service.WaterConditionService;
+import com.example.water.service.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
@@ -36,6 +33,8 @@ public class Service {
     private LogService logService;
     @Autowired
     private MailClientService mailClientService;
+    @Autowired
+    private JpushService jpushService;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
 
@@ -147,6 +146,7 @@ public class Service {
                     e.printStackTrace();
                 }
                 mailClientService.sendWarnMessage(byLoginId,"漏控仪检测到小漏失");
+                jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId()+"","漏失提醒","检测到漏控仪："+byLoginId.getEquipId()+";名称："+byLoginId.getName()+"发生小漏失");
                 break;
             /**
              * 大漏
@@ -162,6 +162,8 @@ public class Service {
                     e.printStackTrace();
                 }
                 mailClientService.sendWarnMessage(byLoginId,"漏控仪检测到大漏失");
+                jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId()+"","漏失提醒","检测到漏控仪："+byLoginId.getEquipId()+";名称："+byLoginId.getName()+"发生大漏失");
+
                 break;
             /**
              * 低电量

@@ -91,3 +91,6 @@ so:
   keepalive:  true
   backlog: 100
 
+water-app:
+  masterSecret: c2a68f5c855cc2ce3bfac548
+  appKey: d7829e5212fa4e65d461ba5b

@@ -2,10 +2,7 @@ package com.example.water;
 
 import com.example.water.model.EquipmentInfo;
 import com.example.water.model.User;
-import com.example.water.service.EquipmentInfoService;
-import com.example.water.service.MailClientService;
-import com.example.water.service.UserDetailsServiceIml;
-import com.example.water.service.WaterConditionService;
+import com.example.water.service.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -37,6 +34,8 @@ public class WaterApplicationTests {
     MailClientService mailClientService;
     @Autowired
     EquipmentInfoService equipmentInfoService;
+    @Autowired
+    JpushService jpushService;
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Test
@@ -57,6 +56,9 @@ public class WaterApplicationTests {
         mailClientService.sendWarnMessage(allByFamily_id.remove(0),"hfidhsuvi");
     }
 
-
+    @Test
+    public void T3(){
+        jpushService.sendToAppByFamilyId(18+"","漏失提醒","检测到漏控仪："+"12"+";名称："+"未命名"+"发生大漏失");
+    }
 
 }
