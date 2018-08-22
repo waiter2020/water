@@ -44,10 +44,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/druid/**").access("hasRole('ADMIN')")
+                .antMatchers("/druid/**","/file/**","/file").access("hasRole('ADMIN')")
                 .antMatchers("/user").hasAuthority("ROLE_USER")
                 .antMatchers("/").permitAll()
-                .antMatchers("/static/**", "/static/*").permitAll()
+                .antMatchers("/static/**", "/static/*","/download/app").permitAll()
                 .antMatchers("/font/**", "/css/*", "/images/*", "/js/*").permitAll()
                 .antMatchers("/register", "/registeraction").permitAll()
                 .antMatchers("/auth/**", "/auth", "/auth/*").permitAll()

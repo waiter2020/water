@@ -59,6 +59,11 @@ spring:
       value: true
     - name: mail.smtp.ssl.socketFactory
       value: sf
+  servlet:
+    multipart:
+      max-file-size: 50Mb
+      max-request-size: 300Mb
+      enabled: true
 server:
   port: 8081
 app:
@@ -67,7 +72,7 @@ app:
   tokenHead: ttttt
   expire: 5184000
   secret: aHR0cHM6Ly9teS5vc2NoaW5hLm5ldC91LzM2ODE4Njg=
-
+  dir: /home/waiter/app
 jwt:
   header: Authorization
   secret: mySecret
