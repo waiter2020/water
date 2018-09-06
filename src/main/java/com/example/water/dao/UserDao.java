@@ -31,4 +31,18 @@ public interface UserDao extends CrudRepository<User,Integer> {
      * @return
      */
     User findById(int id);
+
+    /**
+     * 通过手机号查找
+     * @param phone
+     * @return
+     */
+    User findUserByPhoneNumber(String phone);
+
+    /**
+     * 通过邮箱查找
+     * @param email
+     * @return
+     */
+    User findUserByEmail(String email);
 }

@@ -37,7 +37,15 @@ public class UserDetailsServiceIml implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userDao.findByUsername(s);
         if(user == null){
-            throw new UsernameNotFoundException("user not found");
+            if (s.matches("^(1[0-9])\\d{9}$")){
+                user = userDao.findUserByPhoneNumber(s);
+            }
+            if (user==null&&s.matches("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$")){
+                user=userDao.findUserByEmail(s);
+            }
+            if (user==null){
+                throw new UsernameNotFoundException("user not found");
+            }
         }
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPasswd(),user.getAuthorities());
