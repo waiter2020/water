@@ -8,6 +8,7 @@ import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
 import cn.jpush.api.push.model.notification.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,7 +23,7 @@ public class JpushService {
 
 
 
-
+    @Async
     public  void sendToAppByFamilyId (String familyId, String title, String content) {
 
         PushPayload build = PushPayload.newBuilder().setPlatform(Platform.android())
