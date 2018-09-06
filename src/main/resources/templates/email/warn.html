@@ -11,7 +11,7 @@
     <h1 th:if="${message.equipState==1||message.equipState==2}" th:text="'您的编号为：'+${message.equipId}+';名称为：'+${message.name}+'的漏控仪检测到'+${message.online?'漏失':'连接断开'}+'，请您关注。'"></h1>
     <h1 th:if="${message.lowQuantityOfElectricity}" th:text="'您的编号为：'+${message.equipId}+';名称为：'+${message.name}+'的漏控仪检测到电量不足，请您关注。'"></h1>
     <h2 th:text="'仪表当前状态：'"></h2>
-    <table class="table table-striped table-sm">
+    <table class="table table-striped table-sm" border="1">
         <thead>
         <tr>
             <th>编号</th>

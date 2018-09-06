@@ -61,7 +61,6 @@ public class EquipmentInfo {
 	private Family family;
 	public EquipmentInfo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
     public EquipmentInfo(String equipId, double locLongitude, double locLatitude, int waterUsage, int equipState) {

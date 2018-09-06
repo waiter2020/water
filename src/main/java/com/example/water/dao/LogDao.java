@@ -13,6 +13,6 @@ import java.util.Date;
  * @author waiter
  */
 public interface LogDao extends JpaRepository<Log,Long> {
-    Page<Log> findAllByEquipIdAndAndDateAfterAndDateBeforeOrderByDate(Pageable pageable, int equipId, Date starDate, Date endDate);
+    Page<Log> findAllByEquipIdAndAndDateAfterAndDateBeforeOrderByDate(Pageable pageable, String equipId, Date starDate, Date endDate);
 
 }

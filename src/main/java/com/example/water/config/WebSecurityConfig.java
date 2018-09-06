@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/druid/**","/file/**","/file").access("hasRole('ADMIN')")
                 .antMatchers("/user").hasAuthority("ROLE_USER")
                 .antMatchers("/").permitAll()
-                .antMatchers("/static/**", "/static/*","/download/app").permitAll()
+                .antMatchers("/static/**", "/static/*","/download/app","/app/update").permitAll()
                 .antMatchers("/font/**", "/css/*", "/images/*", "/js/*").permitAll()
                 .antMatchers("/register", "/registeraction").permitAll()
                 .antMatchers("/auth/**", "/auth", "/auth/*").permitAll()

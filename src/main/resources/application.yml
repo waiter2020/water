@@ -38,6 +38,8 @@ spring:
     hibernate:
       ddl-auto: update
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
@@ -99,3 +101,12 @@ so:
 water-app:
   masterSecret: c2a68f5c855cc2ce3bfac548
   appKey: d7829e5212fa4e65d461ba5b
+
+
+logging:
+  file: water.log
+  path: /home/waiter/logs
+  level:
+    org.springframework: warn
+    com.example.water: trace
+

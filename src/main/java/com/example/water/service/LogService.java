@@ -28,6 +28,6 @@ public class LogService {
 
     public Page<Log> getLogsByDate(int page, String equipId, Date startTime, Date endTime){
         Pageable pageable = PageRequest.of(page, 20);
-        return logDao.findAllByEquipIdAndAndDateAfterAndDateBeforeOrderByDate(pageable,Integer.parseInt(equipId),startTime,endTime);
+        return logDao.findAllByEquipIdAndAndDateAfterAndDateBeforeOrderByDate(pageable,equipId,startTime,endTime);
     }
 }

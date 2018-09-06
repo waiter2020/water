@@ -1,11 +1,14 @@
 package com.example.water.controller;
 
+
+
 import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Family;
 import com.example.water.model.User;
 import com.example.water.service.EquipmentInfoService;
 import com.example.water.service.FamilyService;
 import com.example.water.service.UserDetailsServiceIml;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +36,7 @@ public class FamilyController {
     @Autowired
     private EquipmentInfoService equipmentInfoService;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(FamilyController.class);
 
     @GetMapping(value = "/family")
     public String familylist(Model model, HttpServletRequest request){
