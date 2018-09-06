@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by  waiter on 18-6-18.
  * @author waiter
- *
+ * 用户认证
  * 客户端登录注册接口
  */
 @RestController

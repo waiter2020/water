@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * Created by  waiter on 18-8-7  下午10:29.
- *
+ * 设备控制相关接口
  * @author waiter
  */
 @RestController
@@ -34,7 +34,11 @@ public class EquipmentInfoApi {
     @Autowired
     private Service service;
 
-
+    /**
+     * 获取设备列表
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/get_infos")
     public LinkedList<EquipmentInfo> getEquips(HttpServletRequest request){
         UserDetails user = (UserDetails) request.getSession().getAttribute("user");
@@ -45,12 +49,23 @@ public class EquipmentInfoApi {
         return equipmentInfoService.findAllByFamily_Id(userName.getFamily().getId());
     }
 
+    /**
+     * 通过设备id获取设备信息
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/equip_by_id")
     public EquipmentInfo getEquip(HttpServletRequest request){
         String equipId = request.getParameter("equipId");
         return equipmentInfoService.getEquipmentByEquipId(equipId);
     }
 
+    /**
+     * 添加设备
+     * @param map
+     * @param request
+     * @return
+     */
     @Transactional
     @PostMapping(value = "/add")
     public String  addEquip(@RequestBody Map<String,String> map, HttpServletRequest request) {
@@ -80,6 +95,12 @@ public class EquipmentInfoApi {
         return null;
     }
 
+    /**
+     * 删除设备
+     * @param map
+     * @param request
+     * @return
+     */
     @Transactional
     @PostMapping(value = "/delete")
     public String deleteEquip(@RequestBody Map<String,String> map, HttpServletRequest request) {
@@ -100,7 +121,12 @@ public class EquipmentInfoApi {
     }
 
 
-
+    /**
+     * 阀门开关
+     * @param map
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/open_close")
     public String openOrCloseEquip(@RequestBody Map<String,String> map, HttpServletRequest request) {
         String equipId = map.get("equipId");
@@ -115,6 +141,12 @@ public class EquipmentInfoApi {
         return "操作成功";
     }
 
+    /**
+     * 改变检漏模式
+     * @param map
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/change_model")
     public String changeModel(@RequestBody Map<String,String> map, HttpServletRequest request) {
         String equipId = map.get("equipId");
@@ -129,6 +161,28 @@ public class EquipmentInfoApi {
         return "操作成功";
     }
 
+    /**
+     * 修改设备名
+     * @param map
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/change_name")
+    public String changeName(@RequestBody Map<String,String> map, HttpServletRequest request) {
+        String equipId = map.get("equipId");
+        String name = map.get("name");
+        EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
+        equipmentById.setName(name);
+        equipmentInfoService.save(equipmentById);
+        return "操作成功";
+    }
+
+    /**
+     * 改变阈值
+     * @param map
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/change_threshold")
     public String changeThreshold(@RequestBody Map<String,String> map, HttpServletRequest request) {
         String equipId = map.get("equipId");
@@ -145,6 +199,12 @@ public class EquipmentInfoApi {
         return "操作成功";
     }
 
+    /**
+     * 请求设备上传数据
+     * @param map
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/getdata")
     public String getData(@RequestBody Map<String,String> map, HttpServletRequest request) {
         String equipId = map.get("equipId");
@@ -157,6 +217,13 @@ public class EquipmentInfoApi {
         return "请求已发送";
     }
 
+
+    /**
+     * 重启设备
+     * @param map
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/restart")
     public String restartEquip(@RequestBody Map<String,String> map, HttpServletRequest request) {
         String equipId = map.get("equipId");

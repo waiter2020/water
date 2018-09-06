@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * Created by  waiter on 18-8-9  下午3:24.
- *
+ * 用水数据相关接口
  * @author waiter
  */
 @RestController
@@ -35,6 +35,12 @@ public class WaterConditionApi {
     private WaterConditionService waterConditionService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 获取用水数据
+     * @param request
+     * @return
+     * @throws ParseException
+     */
     @RequestMapping(value = "/GetWaterConditionByDate")
     public Object getWater(HttpServletRequest request) throws ParseException {
         //@PathVariable(name = "page",required = false)Integer page , String equipId, Date startTime, Date endTime

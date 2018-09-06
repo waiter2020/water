@@ -38,6 +38,12 @@ public class FamilyController {
 
     private final Logger logger = LoggerFactory.getLogger(FamilyController.class);
 
+    /**
+     * 家庭组列表
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/family")
     public String familylist(Model model, HttpServletRequest request){
         String username = request.getRemoteUser();
@@ -55,6 +61,13 @@ public class FamilyController {
         return "family/list";
     }
 
+    /**
+     * 删除成员
+     * @param id
+     * @param model
+     * @param request
+     * @return
+     */
     @DeleteMapping(value = "/family/{id}")
     public String deleteUser(@PathVariable("id")Integer id,Model model ,HttpServletRequest request){
         User byUserName = (User) userDetailsServiceIml.findByUserName(request.getRemoteUser());
@@ -72,6 +85,13 @@ public class FamilyController {
         return familylist(model,request);
     }
 
+    /**
+     * 添加成员
+     * @param userName
+     * @param model
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/family/add")
     public String addUser(String userName ,Model model, HttpServletRequest request){
         String name = request.getRemoteUser();
@@ -105,6 +125,12 @@ public class FamilyController {
         return "family/add";
     }
 
+    /**
+     * 新建家庭组
+     * @param model
+     * @param family
+     * @return
+     */
     @Transactional
     @PostMapping(value = "/family/create")
     public String create(Model model,Family family){
@@ -120,13 +146,24 @@ public class FamilyController {
         return "family/list";
     }
 
-
+    /**
+     *
+     * @param model
+     * @return
+     */
     @GetMapping(value = "/family/create")
     public String getCreateView(Model model){
         model.addAttribute("create_msg","请先创建家庭组");
         return "family/create_family";
     }
 
+    /**
+     * 解散家庭组
+     * @param model
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @Transactional
     @GetMapping(value = "/family/remove")
     public String remove(Model model,HttpServletRequest request) throws Exception {
@@ -167,6 +204,12 @@ public class FamilyController {
         return familylist(model,request);
     }
 
+    /**
+     * 退出家庭组
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/family/exit")
     public String exit(Model model,HttpServletRequest request){
         String remoteUser = request.getRemoteUser();

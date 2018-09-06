@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * Created by  waiter on 18-8-7  下午9:54.
- *
+ * 用户相关接口
  * @author waiter
  */
 @RestController
@@ -29,6 +29,11 @@ public class UserApi {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * 获取用户信息
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/get_info")
     public User getUser(HttpServletRequest request){
         UserDetails user = (UserDetails) request.getSession().getAttribute("user");
@@ -36,6 +41,12 @@ public class UserApi {
         return userName;
     }
 
+    /**
+     * 修改用户信息
+     * @param map
+     * @param request
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping(value = "/change")
     public String changeInfo(@RequestBody Map<String,String> map, HttpServletRequest request){
@@ -59,6 +70,13 @@ public class UserApi {
         return "修改成功";
     }
 
+
+    /**
+     * 修改密码
+     * @param map
+     * @param request
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping(value = "/change_pwd")
     public String ChangePwd(@RequestBody Map<String,String> map,HttpServletRequest request){

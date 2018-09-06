@@ -21,7 +21,7 @@ import java.util.TreeMap;
 
 /**
  * Created by  waiter on 18-8-9  下午3:31.
- *
+ *  家庭组相关接口
  * @author waiter
  */
 @RestController
@@ -35,6 +35,11 @@ public class FamilyApi {
     private EquipmentInfoService equipmentInfoService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 获取成员列表
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/family")
     public LinkedList<User> familylist(HttpServletRequest request){
         UserDetails user1 = (UserDetails) request.getSession().getAttribute("user");
@@ -47,6 +52,11 @@ public class FamilyApi {
         return users==null?new LinkedList<>():users;
     }
 
+    /**
+     * 新建家庭组
+     * @param family
+     * @return
+     */
     @Transactional
     @PostMapping(value = "/create")
     public User create(@RequestBody Family family){
@@ -62,6 +72,12 @@ public class FamilyApi {
         return byUserName;
     }
 
+    /**
+     * 添加成员
+     * @param map
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/add")
     public String addUser(@RequestBody Map<String,String> map, HttpServletRequest request){
         UserDetails user1 = (UserDetails) request.getSession().getAttribute("user");
@@ -81,6 +97,12 @@ public class FamilyApi {
         return null;
     }
 
+    /**
+     * 删除成员
+     * @param map
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/delete_user")
     public String deleteUser(@RequestBody Map<String,String> map,HttpServletRequest request){
         UserDetails user1 = (UserDetails) request.getSession().getAttribute("user");
@@ -94,6 +116,12 @@ public class FamilyApi {
         return "成功从家庭组里移除了";
     }
 
+    /**
+     * 解散家庭组
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @Transactional
     @PostMapping(value = "/remove")
     public String remove(HttpServletRequest request) throws Exception {
@@ -131,6 +159,11 @@ public class FamilyApi {
         }
     }
 
+    /**
+     * 退出家庭组
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/exit")
     public String exit(HttpServletRequest request){
         UserDetails user1 = (UserDetails) request.getSession().getAttribute("user");

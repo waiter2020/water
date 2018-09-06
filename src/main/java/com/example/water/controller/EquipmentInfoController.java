@@ -34,12 +34,23 @@ public class EquipmentInfoController {
     private Service service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 设备列表
+     * @return
+     */
+    @Deprecated
     @ResponseBody
     @RequestMapping(value = "/findall")
     public Object findAll() {
         return equipmentInfoService.findAll();
     }
 
+    /**
+     * 显示设备列表页面
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/equip")
     public String equip(Model model, HttpServletRequest request) {
         String remoteUser = request.getRemoteUser();
@@ -53,6 +64,13 @@ public class EquipmentInfoController {
         return "equip/list";
     }
 
+    /**
+     * 添加设备
+     * @param model
+     * @param equipId
+     * @param request
+     * @return
+     */
     @Transactional
     @PostMapping(value = "equip/add")
     public String addEquip(Model model, String equipId, HttpServletRequest request) {
@@ -85,6 +103,13 @@ public class EquipmentInfoController {
         return equip(model, request);
     }
 
+    /**
+     * 删除设备
+     * @param equipId
+     * @param model
+     * @param request
+     * @return
+     */
     @Transactional
     @DeleteMapping(value = "/equip/{id}")
     public String deleteEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
@@ -107,6 +132,13 @@ public class EquipmentInfoController {
         return "equip/add";
     }
 
+    /**
+     * 重启设备
+     * @param equipId
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/equip/restart/{id}")
     public String restartEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
@@ -119,6 +151,13 @@ public class EquipmentInfoController {
         return equip(model, request);
     }
 
+    /**
+     * 修改设备
+     * @param equipId
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/equip/change/{id}")
     public String toChangeEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
@@ -163,7 +202,13 @@ public class EquipmentInfoController {
         return equip(model, request);
     }
 
-
+    /**
+     * 设置阀门开关
+     * @param equipId
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/equip/open_close/{id}")
     public String openOrCloseEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
@@ -177,6 +222,13 @@ public class EquipmentInfoController {
         return "redirect:/equip";
     }
 
+    /**
+     * 请求上传数据
+     * @param equipId
+     * @param model
+     * @param request
+     * @return
+     */
     @GetMapping(value = "/equip/getdata/{id}")
     public String getData(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by  waiter on 18-8-21  下午10:09.
- *
+ * 极光推送注入
  * @author waiter
  */
 @Configuration

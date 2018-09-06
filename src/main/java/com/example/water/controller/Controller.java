@@ -75,6 +75,12 @@ public class Controller {
         }
     }
 
+    /**
+     * 欢迎页
+     * @param model
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = {"/","/wellcome"})
     public String wellCome(Model model) throws IOException {
         File dir = new File(path);
@@ -112,56 +118,13 @@ public class Controller {
         return "wellcome";
     }
 
-//    @RequestMapping("/download/app")
-//    public String downLoad(double version,HttpServletResponse response) throws IOException {
-//        File files = new File(path + "/" + version);
-//        File[] files1 = files.listFiles();
-//        File file=null;
-//        for (int j = 0; j < files1.length; j++) {
-//            String absolutePath = files1[j].getAbsolutePath();
-//            if (absolutePath.endsWith(".apk")){
-//                file = files1[j].getCanonicalFile();
-//                break;
-//            }
-//        }
-//        //判断文件父目录是否存在
-//        if(file.exists()){
-//            response.setHeader("content-type", "application/octet-stream");
-//            //response.setContentType("multipart/form-data;charset=UTF-8");
-//            response.setContentType("application/octet-stream");
-//            response.setHeader("Content-Disposition", "attachment;fileName=" + file.getName());
-//
-//            byte[] buffer = new byte[1024];
-//            FileInputStream fis = null; //文件输入流
-//            BufferedInputStream bis = null;
-//
-//            OutputStream os = null; //输出流
-//            try {
-//                os = response.getOutputStream();
-//                fis = new FileInputStream(file);
-//                bis = new BufferedInputStream(fis);
-//                int i = bis.read(buffer);
-//                while(i != -1){
-//                    os.write(buffer);
-//                    i = bis.read(buffer);
-//                }
-//
-//            } catch (Exception e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//            System.out.println("----------file download" + file.getName());
-//            try {
-//                bis.close();
-//                fis.close();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        }
-//        return null;
-//    }
-
+    /**
+     * app检查更新接口
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @ResponseBody
     @RequestMapping(value = "/app/update")
     public UpdateInfo update(HttpServletRequest request,HttpServletResponse response) throws IOException{
@@ -207,7 +170,13 @@ public class Controller {
         return updateInfo;
     }
 
-
+    /**
+     * app下载接口
+     * @param version
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/download/app")
     public ResponseEntity<InputStreamResource> downLoad(double version, HttpServletResponse response) throws IOException {
         File files = new File(path + "/" + version);

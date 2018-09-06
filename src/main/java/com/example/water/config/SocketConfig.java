@@ -2,7 +2,7 @@ package com.example.water.config;
 
 /**
  * Created by  waiter on 18-6-18.
- *
+ * socket配置
  * @author waiter
  */
 import java.net.InetSocketAddress;
