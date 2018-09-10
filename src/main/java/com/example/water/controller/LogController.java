@@ -5,7 +5,7 @@ import com.example.water.model.Log;
 import com.example.water.model.User;
 import com.example.water.service.EquipmentInfoService;
 import com.example.water.service.LogService;
-import com.example.water.service.UserDetailsServiceIml;
+import com.example.water.service.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import java.util.List;
 @Controller
 public class LogController {
     @Autowired
-    private UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private EquipmentInfoService equipmentInfoService;
     @Autowired

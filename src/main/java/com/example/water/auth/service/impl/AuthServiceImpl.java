@@ -4,7 +4,7 @@ import com.example.water.auth.service.AuthService;
 import com.example.water.dao.UserDao;
 import com.example.water.model.Role;
 import com.example.water.model.User;
-import com.example.water.service.UserDetailsServiceIml;
+import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     public AuthServiceImpl(
             AuthenticationManager authenticationManager,
-            UserDetailsServiceIml userDetailsService,
+            UserDetailsServiceImpl userDetailsService,
             JwtTokenUtil jwtTokenUtil,
             UserDao userRepository) {
         this.authenticationManager = authenticationManager;

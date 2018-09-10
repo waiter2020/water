@@ -1,7 +1,8 @@
 package com.example.water.controller;
 
 import com.example.water.model.User;
-import com.example.water.service.UserDetailsServiceIml;
+
+import com.example.water.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import java.util.Date;
 @Controller
 public class UserController {
     @Autowired
-    private UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 

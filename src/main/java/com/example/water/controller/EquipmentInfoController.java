@@ -4,7 +4,7 @@ import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Family;
 import com.example.water.model.User;
 import com.example.water.service.EquipmentInfoService;
-import com.example.water.service.UserDetailsServiceIml;
+import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.socket.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class EquipmentInfoController {
     @Autowired
     private EquipmentInfoService equipmentInfoService;
     @Autowired
-    private UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private Service service;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

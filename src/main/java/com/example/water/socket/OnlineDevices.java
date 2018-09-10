@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by  waiter on 18-7-26  下午3:16.
- *
+ * 在线设备
  * @author waiter
  */
 @Component

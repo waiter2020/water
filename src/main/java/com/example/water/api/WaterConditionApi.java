@@ -1,7 +1,8 @@
 package com.example.water.api;
 
 import com.example.water.model.WaterCondition;
-import com.example.water.service.UserDetailsServiceIml;
+
+import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.service.WaterConditionService;
 import com.example.water.utils.PageBean;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ import java.util.List;
 @RequestMapping(value = "/api/WaterCondition")
 public class WaterConditionApi {
     @Autowired
-    UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private WaterConditionService waterConditionService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

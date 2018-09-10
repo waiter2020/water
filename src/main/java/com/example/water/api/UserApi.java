@@ -1,7 +1,7 @@
 package com.example.water.api;
 
 import com.example.water.model.User;
-import com.example.water.service.UserDetailsServiceIml;
+import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ import java.util.Map;
 @RequestMapping(value = "/api/user")
 public class UserApi {
     @Autowired
-    UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 

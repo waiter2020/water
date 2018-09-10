@@ -4,7 +4,7 @@ import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Family;
 import com.example.water.model.User;
 import com.example.water.service.EquipmentInfoService;
-import com.example.water.service.UserDetailsServiceIml;
+import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.socket.Service;
 import com.example.water.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Map;
 @RequestMapping(value = "/api/equip")
 public class EquipmentInfoApi {
     @Autowired
-    private UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private EquipmentInfoService equipmentInfoService;
     @Autowired

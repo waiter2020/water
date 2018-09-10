@@ -2,7 +2,7 @@ package com.example.water.controller;
 
 import com.example.water.model.Role;
 import com.example.water.model.User;
-import com.example.water.service.UserDetailsServiceIml;
+import com.example.water.service.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import java.util.LinkedList;
 @org.springframework.stereotype.Controller
 public class RegController {
     @Autowired
-    private UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

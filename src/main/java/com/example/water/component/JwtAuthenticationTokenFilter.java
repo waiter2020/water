@@ -1,7 +1,8 @@
 package com.example.water.component;
 
 import com.example.water.model.User;
-import com.example.water.service.UserDetailsServiceIml;
+
+import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    private UserDetailsService userDetailsService = new UserDetailsServiceIml();
+    private UserDetailsService userDetailsService ;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -42,7 +43,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private String tokenHead;
 
     @Autowired
-    public JwtAuthenticationTokenFilter(UserDetailsServiceIml userDetailsService, JwtTokenUtil jwtTokenUtil) {
+    public JwtAuthenticationTokenFilter(UserDetailsServiceImpl userDetailsService, JwtTokenUtil jwtTokenUtil) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
     }

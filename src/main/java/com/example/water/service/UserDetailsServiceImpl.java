@@ -17,7 +17,7 @@ import java.util.LinkedList;
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class UserDetailsServiceIml implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserDao userDao;
 
@@ -33,19 +33,27 @@ public class UserDetailsServiceIml implements UserDetailsService {
 
     public void save(User user){userDao.save(user);}
 
+    /**
+     * 用户登录认证
+     * @param s
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userDao.findByUsername(s);
         if(user == null){
-            if (s.matches("^(1[0-9])\\d{9}$")){
-                user = userDao.findUserByPhoneNumber(s);
-            }
-            if (user==null&&s.matches("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$")){
-                user=userDao.findUserByEmail(s);
-            }
-            if (user==null){
-                throw new UsernameNotFoundException("user not found");
-            }
+           //下面代码是留作以后需要手机号登录和邮箱登录的
+//            if (s.matches("^(1[0-9])\\d{9}$")){
+//                user = userDao.findUserByPhoneNumber(s);
+//            }
+//            if (user==null&&s.matches("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$")){
+//                user=userDao.findUserByEmail(s);
+//            }
+//            if (user==null){
+//                throw new UsernameNotFoundException("user not found");
+//            }
+            throw new UsernameNotFoundException("user not found");
         }
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPasswd(),user.getAuthorities());

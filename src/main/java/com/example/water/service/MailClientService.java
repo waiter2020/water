@@ -28,7 +28,7 @@ public class MailClientService {
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
-    private UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private MailContentBuilder mailContentBuilder;
 

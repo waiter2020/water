@@ -2,7 +2,8 @@ package com.example.water.controller;
 
 import com.example.water.auth.service.AuthService;
 import com.example.water.model.User;
-import com.example.water.service.UserDetailsServiceIml;
+
+import com.example.water.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController {
     @Autowired
-    private UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Value("${jwt.header}")
     private String tokenHeader;
     @Autowired

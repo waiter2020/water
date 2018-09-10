@@ -4,7 +4,8 @@ import com.example.water.model.EquipmentInfo;
 import com.example.water.model.User;
 import com.example.water.model.WaterCondition;
 import com.example.water.service.EquipmentInfoService;
-import com.example.water.service.UserDetailsServiceIml;
+
+import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.service.WaterConditionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class WaterConditionController extends HttpServlet {
     @Autowired
     private WaterConditionService waterConditionService;
     @Autowired
-    private UserDetailsServiceIml userDetailsServiceIml;
+    private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private EquipmentInfoService equipmentInfoService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

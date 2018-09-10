@@ -1,7 +1,8 @@
 package com.example.water.config;
 
 import com.example.water.component.JwtAuthenticationTokenFilter;
-import com.example.water.service.UserDetailsServiceIml;
+
+import com.example.water.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserDetailsServiceIml userDetailsServiceIml;
+    UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 

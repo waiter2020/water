@@ -5,7 +5,7 @@ import com.example.water.model.Family;
 import com.example.water.model.User;
 import com.example.water.service.EquipmentInfoService;
 import com.example.water.service.FamilyService;
-import com.example.water.service.UserDetailsServiceIml;
+import com.example.water.service.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.TreeMap;
 @RequestMapping(value = "/api/family")
 public class FamilyApi {
     @Autowired
-    UserDetailsServiceIml userDetailsServiceIml;
+    UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private FamilyService familyService;
     @Autowired
