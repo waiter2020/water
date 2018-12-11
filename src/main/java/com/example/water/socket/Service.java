@@ -59,7 +59,8 @@ public class Service {
             equipmentByEquipId = new EquipmentInfo();
             equipmentByEquipId.setName("未命名");
             equipmentByEquipId.setEquipId(equipId);
-            equipmentByEquipId.setOpen(false);
+            equipmentByEquipId.setOpen(true);
+            equipmentByEquipId.setLock(false);
             equipmentByEquipId.setModel(0);
             equipmentByEquipId.setEndStateTime(new Date());
             equipmentByEquipId.setThresholdType(0);
@@ -74,11 +75,12 @@ public class Service {
 
         equipmentInfoService.save(equipmentByEquipId);
 
-
-        /**
-         * 设置阀门开关
-         */
-        openOrClose(ctx.channel().id().asLongText(),equipId,equipmentByEquipId.isOpen());
+        if (equipmentByEquipId.getLock()) {
+            /**
+             * 设置阀门开关
+             */
+            openOrClose(ctx.channel().id().asLongText(), equipId, equipmentByEquipId.isOpen());
+        }
         /**
          * 设置阈值
          */
@@ -141,7 +143,7 @@ public class Service {
                 logService.save(new Log(byLoginId.getEquipId(),"小漏失",new Date()));
                 byLoginId.setEquipState(1);
                 byLoginId.setOpen(false);
-                openOrClose(byLoginId.getLoginId(),byLoginId.getEquipId()+"",byLoginId.isOpen());
+                //openOrClose(byLoginId.getLoginId(),byLoginId.getEquipId()+"",byLoginId.isOpen());
                 try {
                     byLoginId.setEndStateTime(simpleDateFormat.parse(msg.substring(1, 15)));
                 } catch (ParseException e) {
@@ -157,7 +159,7 @@ public class Service {
                 logService.save(new Log(byLoginId.getEquipId(),"大漏失",new Date()));
                 byLoginId.setEquipState(2);
                 byLoginId.setOpen(false);
-                openOrClose(byLoginId.getLoginId(),byLoginId.getEquipId()+"",byLoginId.isOpen());
+                //openOrClose(byLoginId.getLoginId(),byLoginId.getEquipId()+"",byLoginId.isOpen());
                 try {
                     byLoginId.setEndStateTime(simpleDateFormat.parse(msg.substring(1, 15)));
                 } catch (ParseException e) {

@@ -53,6 +53,9 @@ public class EquipmentInfo {
 	private Date endStateTime;
 
     private boolean lowQuantityOfElectricity;
+    //是否已强制禁止用水
+    @Column(name = "is_lock")
+    private Boolean lock;
 
 	/**
 	 * 标明此表属于哪个家庭

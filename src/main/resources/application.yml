@@ -105,7 +105,7 @@ water-app:
 
 logging:
   file: water.log
-  path: /home/waiter/logs
+  path: /home/waiter/logs/
   level:
     org.springframework: warn
     com.example.water: trace

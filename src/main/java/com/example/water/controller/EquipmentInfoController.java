@@ -214,6 +214,11 @@ public class EquipmentInfoController {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
             equipmentById.setOpen(!equipmentById.isOpen());
+            if (equipmentById.isOpen()) {
+                equipmentById.setLock(false);
+            }else {
+                equipmentById.setLock(true);
+            }
             service.openOrClose(equipmentById.getLoginId(), equipmentById.getEquipId() + "", equipmentById.isOpen());
             equipmentInfoService.save(equipmentById);
         } else {

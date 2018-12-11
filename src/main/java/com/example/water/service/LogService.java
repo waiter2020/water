@@ -2,6 +2,9 @@ package com.example.water.service;
 
 import com.example.water.dao.LogDao;
 import com.example.water.model.Log;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,11 +19,14 @@ import java.util.Date;
  *
  * @author waiter
  */
+@Aspect
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class LogService {
     @Autowired
     private LogDao logDao;
+    @Autowired
+    private MailClientService mailClientService;
 
     public void save(Log log){
         logDao.save(log);
@@ -30,4 +36,15 @@ public class LogService {
         Pageable pageable = PageRequest.of(page, 20);
         return logDao.findAllByEquipIdAndAndDateAfterAndDateBeforeOrderByDate(pageable,equipId,startTime,endTime);
     }
+
+    @Pointcut("execution(* com.example.water.service.*Service.*(..))&&!bean(logService)")
+    public void myAop(){}
+
+    @AfterThrowing(value = "myAop()",throwing = "ex")
+    public void myLog(Throwable ex){
+        mailClientService.prepareAndSend("1403976416@qq.com",ex.getMessage(),"终端水系统异常信息");
+    }
+
+
+
 }

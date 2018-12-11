@@ -51,7 +51,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
-        System.out.println(request.getRemoteUser());
+        //System.out.println(request.getRemoteUser());
             //System.out.println("进来了 JwtAuthenticationTokenFilter");
 
             // 得到 请求头的 认证信息 authToken

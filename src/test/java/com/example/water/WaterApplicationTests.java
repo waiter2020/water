@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 public class WaterApplicationTests {
     @Autowired
-    UserDetailsServiceIml userDetailsServiceIml;
+    UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     WaterConditionService waterConditionService;
     @Autowired
