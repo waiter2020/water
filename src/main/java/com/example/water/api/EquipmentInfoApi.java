@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.SessionScope;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -235,7 +236,8 @@ public class EquipmentInfoApi {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
             service.reStart(equipmentById.getLoginId(), equipId);
-            equipmentById.setRestart(true);
+            equipmentById.setEquipState(5);
+            equipmentById.setEndStateTime(new Date());
             equipmentInfoService.save(equipmentById);
         } else {
             return "设备已离线";

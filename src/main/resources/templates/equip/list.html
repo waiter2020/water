@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -87,7 +87,8 @@
                             <td th:case="2" th:text="大漏失"></td>
                             <td th:case="5" th:text="正常 "></td>
                         </div>
-                        <td th:if="${!equip.isOpen()&&equip.equipState!=1&&equip.equipState!=2}">禁止用水</td>
+                        <td th:if="${!equip.isOpen()&&equip.equipState!=1&&equip.equipState!=2&&equip.lock}">禁止用水</td>
+                            <td th:if="${!equip.isOpen()&&equip.equipState!=1&&equip.equipState!=2&&equip.lock!=true}">阀门关闭</td>
                         </div>
                         <td th:if="${equip.online==false}" th:text="离线"></td>
                         <div th:switch="${equip.model}">
@@ -106,7 +107,8 @@
                                         <span th:if="${equip.online==true}">
 											<a th:href="@{/equip/getdata/}+${equip.equipId}"
                                                class="btn btn-sm btn-success">上传数据</a>
-                                        <a th:href="@{/equip/open_close/}+${equip.equipId}"
+
+                                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/equip/open_close/}+${equip.equipId}"
                                            class="btn btn-sm btn-success" th:text="${equip.isOpen()?'禁止用水':'允许用水'}"></a>
                                         <a th:href="@{/equip/restart/}+${equip.equipId}" class="btn btn-sm btn-success">重启</a>
                                         </span>

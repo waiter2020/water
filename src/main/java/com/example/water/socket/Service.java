@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -61,7 +62,7 @@ public class Service {
             equipmentByEquipId.setEquipId(equipId);
             equipmentByEquipId.setOpen(true);
             equipmentByEquipId.setLock(false);
-            equipmentByEquipId.setRestart(false);
+//            equipmentByEquipId.setRestart(false);
             equipmentByEquipId.setModel(0);
             equipmentByEquipId.setEndStateTime(new Date());
             equipmentByEquipId.setThresholdType(0);
@@ -70,10 +71,11 @@ public class Service {
         equipmentByEquipId.setOnline(true);
         equipmentByEquipId.setLoginId(ctx.channel().id().asLongText());
         equipmentByEquipId.setLowQuantityOfElectricity(false);
-        if (equipmentByEquipId.getRestart()) {
-            equipmentByEquipId.setEquipState(5);
-            equipmentByEquipId.setRestart(false);
-        }
+
+//        if (equipmentByEquipId.getRestart()) {
+//            equipmentByEquipId.setEquipState(5);
+//            equipmentByEquipId.setRestart(false);
+//        }
 
         equipmentInfoService.save(equipmentByEquipId);
 
@@ -110,7 +112,9 @@ public class Service {
         logService.save(new Log(byLoginId.getEquipId(),"断开连接",new Date()));
         onlineDevices.removeDevice(channel.id().asLongText());
         equipmentInfoService.save(byLoginId);
-        mailClientService.sendWarnMessage(byLoginId,"漏控仪断开连接");
+        if (byLoginId.getFamily()!=null) {
+            mailClientService.sendWarnMessage(byLoginId,"漏控仪断开连接");
+        }
     }
 
 
@@ -121,7 +125,17 @@ public class Service {
 
 
     public void setTime(Channel channel, String equipId) {
+        Calendar instance = Calendar.getInstance();
+
         String format = simpleDateFormat.format(new Date());
+        //yyyyMMddHHmmss
+        int year = instance.get(Calendar.YEAR);
+        int  month = instance.get(Calendar.MONTH);
+        int day = instance.get(Calendar.DAY_OF_MONTH);
+        int hour = instance.get(Calendar.HOUR_OF_DAY);
+        int mm = instance.get(Calendar.MINUTE);
+        int ss = instance.get(Calendar.SECOND);
+        format=String.format("%04d",year)+String.format("%02d",month)+String.format("%02d",day)+String.format("%02d",hour)+String.format("%02d",mm)+String.format("%02d",ss);
         channel.writeAndFlush("z" + equipId + "a" + format + ends);
     }
 
@@ -143,36 +157,40 @@ public class Service {
              */
             case '1':
                 logService.save(new Log(byLoginId.getEquipId(),"小漏失",new Date()));
-                byLoginId.setEquipState(1);
-                byLoginId.setOpen(false);
+
+                //byLoginId.setOpen(false);
                 //openOrClose(byLoginId.getLoginId(),byLoginId.getEquipId()+"",byLoginId.isOpen());
                 try {
                     byLoginId.setEndStateTime(simpleDateFormat.parse(msg.substring(1, 15)));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (byLoginId.getFamily()!=null) {
+                if (byLoginId.getFamily()!=null&&byLoginId.getEquipState()!=1) {
                     mailClientService.sendWarnMessage(byLoginId, "漏控仪检测到小漏失");
                     jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId() + "", "漏失提醒", "检测到漏控仪：" + byLoginId.getEquipId() + ";名称：" + byLoginId.getName() + "发生小漏失");
                 }
+                byLoginId.setEndStateTime(new Date());
+                byLoginId.setEquipState(1);
                 break;
             /**
              * 大漏
              */
             case '2':
                 logService.save(new Log(byLoginId.getEquipId(),"大漏失",new Date()));
-                byLoginId.setEquipState(2);
-                byLoginId.setOpen(false);
+
+                //byLoginId.setOpen(false);
                 //openOrClose(byLoginId.getLoginId(),byLoginId.getEquipId()+"",byLoginId.isOpen());
                 try {
                     byLoginId.setEndStateTime(simpleDateFormat.parse(msg.substring(1, 15)));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (byLoginId.getFamily()!=null) {
+                if (byLoginId.getFamily()!=null&&byLoginId.getEquipState()!=2) {
                     mailClientService.sendWarnMessage(byLoginId, "漏控仪检测到大漏失");
                     jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId() + "", "漏失提醒", "检测到漏控仪：" + byLoginId.getEquipId() + ";名称：" + byLoginId.getName() + "发生大漏失");
                 }
+                byLoginId.setEndStateTime(new Date());
+                byLoginId.setEquipState(2);
                 break;
             /**
              * 低电量
@@ -186,15 +204,15 @@ public class Service {
             case '5':
                 logService.save(new Log(byLoginId.getEquipId(),"停止用水",new Date()));
                 if (0 == byLoginId.getEquipState()) {
-                    double volumn = Integer.parseInt(msg.substring(15, 20));
+                    double volumn = Double.parseDouble(msg.substring(15, 20));
                     Date endTime = null;
                     try {
                         endTime = simpleDateFormat.parse(msg.substring(1, 15));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    byLoginId.setWaterUsage(byLoginId.getWaterUsage()+volumn/100);
-                    waterConditionService.saveWaterInfo(byLoginId.getEquipId(), byLoginId.getEndStateTime(), endTime, volumn / 100);
+                    byLoginId.setWaterUsage(byLoginId.getWaterUsage()+volumn/100.0);
+                    waterConditionService.saveWaterInfo(byLoginId.getEquipId(), byLoginId.getEndStateTime(), endTime, volumn / 100.0);
                 }
                 byLoginId.setEquipState(5);
                 byLoginId.setEndStateTime(new Date());

@@ -58,7 +58,7 @@ public class EquipmentInfo {
     private Boolean lock;
 
     //是否手动重启
-    private Boolean restart;
+  //  private Boolean restart;
 
 	/**
 	 * 标明此表属于哪个家庭

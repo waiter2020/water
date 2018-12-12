@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 
@@ -145,7 +146,9 @@ public class EquipmentInfoController {
         if (equipmentById.isOnline()) {
             service.reStart(equipmentById.getLoginId(), equipId);
             model.addAttribute("equipmsg", "成功重启设备" + equipId);
-            equipmentById.setRestart(true);
+            //equipmentById.setRestart(true);
+            equipmentById.setEquipState(5);
+            equipmentById.setEndStateTime(new Date());
             equipmentInfoService.save(equipmentById);
         } else {
             model.addAttribute("equipmsg", "设备已离线");
