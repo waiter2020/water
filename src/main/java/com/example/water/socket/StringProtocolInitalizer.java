@@ -8,6 +8,7 @@ package com.example.water.socket;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.FixedLengthFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -33,6 +34,7 @@ public class StringProtocolInitalizer extends ChannelInitializer<SocketChannel> 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
+        pipeline.addLast(new FixedLengthFrameDecoder(24));
         pipeline.addLast("decoder", stringDecoder);
         pipeline.addLast("handler", serverHandler);
         pipeline.addLast("encoder", stringEncoder);

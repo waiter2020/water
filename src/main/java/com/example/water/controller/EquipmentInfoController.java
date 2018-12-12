@@ -145,6 +145,8 @@ public class EquipmentInfoController {
         if (equipmentById.isOnline()) {
             service.reStart(equipmentById.getLoginId(), equipId);
             model.addAttribute("equipmsg", "成功重启设备" + equipId);
+            equipmentById.setRestart(true);
+            equipmentInfoService.save(equipmentById);
         } else {
             model.addAttribute("equipmsg", "设备已离线");
         }

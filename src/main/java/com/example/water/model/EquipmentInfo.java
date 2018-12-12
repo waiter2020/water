@@ -57,6 +57,9 @@ public class EquipmentInfo {
     @Column(name = "is_lock")
     private Boolean lock;
 
+    //是否手动重启
+    private Boolean restart;
+
 	/**
 	 * 标明此表属于哪个家庭
 	 */

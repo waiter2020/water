@@ -61,6 +61,7 @@ public class Service {
             equipmentByEquipId.setEquipId(equipId);
             equipmentByEquipId.setOpen(true);
             equipmentByEquipId.setLock(false);
+            equipmentByEquipId.setRestart(false);
             equipmentByEquipId.setModel(0);
             equipmentByEquipId.setEndStateTime(new Date());
             equipmentByEquipId.setThresholdType(0);
@@ -69,9 +70,10 @@ public class Service {
         equipmentByEquipId.setOnline(true);
         equipmentByEquipId.setLoginId(ctx.channel().id().asLongText());
         equipmentByEquipId.setLowQuantityOfElectricity(false);
-
-        equipmentByEquipId.setEquipState(5);
-
+        if (equipmentByEquipId.getRestart()) {
+            equipmentByEquipId.setEquipState(5);
+            equipmentByEquipId.setRestart(false);
+        }
 
         equipmentInfoService.save(equipmentByEquipId);
 
@@ -149,8 +151,10 @@ public class Service {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                mailClientService.sendWarnMessage(byLoginId,"漏控仪检测到小漏失");
-                jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId()+"","漏失提醒","检测到漏控仪："+byLoginId.getEquipId()+";名称："+byLoginId.getName()+"发生小漏失");
+                if (byLoginId.getFamily()!=null) {
+                    mailClientService.sendWarnMessage(byLoginId, "漏控仪检测到小漏失");
+                    jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId() + "", "漏失提醒", "检测到漏控仪：" + byLoginId.getEquipId() + ";名称：" + byLoginId.getName() + "发生小漏失");
+                }
                 break;
             /**
              * 大漏
@@ -165,9 +169,10 @@ public class Service {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                mailClientService.sendWarnMessage(byLoginId,"漏控仪检测到大漏失");
-                jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId()+"","漏失提醒","检测到漏控仪："+byLoginId.getEquipId()+";名称："+byLoginId.getName()+"发生大漏失");
-
+                if (byLoginId.getFamily()!=null) {
+                    mailClientService.sendWarnMessage(byLoginId, "漏控仪检测到大漏失");
+                    jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId() + "", "漏失提醒", "检测到漏控仪：" + byLoginId.getEquipId() + ";名称：" + byLoginId.getName() + "发生大漏失");
+                }
                 break;
             /**
              * 低电量
