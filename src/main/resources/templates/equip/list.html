@@ -79,7 +79,7 @@
                         <td th:text="${equip.name}"></td>
                         <td th:text="${equip.locLongitude}"></td>
                         <td th:text="${equip.locLatitude}"></td>
-                        <td th:text="${equip.waterUsage}"></td>
+                        <td th:text="${#numbers.formatDecimal(equip.waterUsage,0,1)}"></td>
                         <div th:if="${equip.online==true}">
                         <div th:if="${equip.isOpen()||equip.equipState==1||equip.equipState==2}" th:switch="${equip.equipState}">
                             <td th:case="0" th:text="正常"></td>

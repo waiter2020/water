@@ -37,8 +37,7 @@ public class UserApi {
     @GetMapping(value = "/get_info")
     public User getUser(HttpServletRequest request){
         UserDetails user = (UserDetails) request.getSession().getAttribute("user");
-        User userName = (User) userDetailsServiceIml.findByUserName(user.getUsername());
-        return userName;
+        return (User) userDetailsServiceIml.findByUserName(user.getUsername());
     }
 
     /**
