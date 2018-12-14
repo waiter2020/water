@@ -47,13 +47,13 @@ public class Service {
     private final String ends = "" + c1 + c2;
 
     public void initDevice(ChannelHandlerContext ctx, String msg) {
-        String equipId = msg.substring(1, 4);
+        String equipId = msg.substring(2, 5);
         log.info("equipId:" + equipId);
         onlineDevices.addDevice(ctx.channel());
         logService.save(new Log(equipId,"连接",new Date()));
         log.info(onlineDevices.getSize() + "");
 
-        respond(ctx.channel(), equipId);
+        respond(ctx.channel());
 
         EquipmentInfo equipmentByEquipId = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentByEquipId == null) {
@@ -107,6 +107,9 @@ public class Service {
 
     public void logout(Channel channel) {
         EquipmentInfo byLoginId = equipmentInfoService.findByLoginId(channel.id().asLongText());
+        if (byLoginId==null){
+            return;
+        }
         byLoginId.setLoginId(null);
         byLoginId.setOnline(false);
         logService.save(new Log(byLoginId.getEquipId(),"断开连接",new Date()));
@@ -118,7 +121,12 @@ public class Service {
     }
 
 
-    public void respond(Channel channel, String equipId) {
+    public void respond(Channel channel) {
+        EquipmentInfo byLoginId = equipmentInfoService.findByLoginId(channel.id().asLongText());
+        if (byLoginId==null){
+            return;
+        }
+        String equipId = byLoginId.getEquipId();
         equipId = String.format("%0" + 3 + "d", Integer.parseInt(equipId) );
         channel.writeAndFlush("z" + equipId + "b" + ends);
     }
@@ -221,7 +229,7 @@ public class Service {
             default:
                 break;
         }
-        respond(channel, byLoginId.getEquipId() + "");
+        respond(channel);
         equipmentInfoService.save(byLoginId);
     }
 

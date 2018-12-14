@@ -54,12 +54,12 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
                 service.deviceData(ctx.channel(),msg.substring(4));
                 break;
             case '1':
-                service.respond(ctx.channel(),msg.substring(2,5));
+                service.respond(ctx.channel());
                 break;
             case '2':
-                service.respond(ctx.channel(),msg.substring(1,4));
+                service.respond(ctx.channel());
                 break;
-            case '3':
+            case '4':
                 service.initDevice(ctx,msg);
 
                 break;
