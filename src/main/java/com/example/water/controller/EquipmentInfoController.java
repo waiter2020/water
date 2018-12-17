@@ -141,7 +141,7 @@ public class EquipmentInfoController {
      * @return
      */
     @GetMapping(value = "/equip/restart/{id}")
-    public String restartEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
+    public String restartEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) throws InterruptedException {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
             service.reStart(equipmentById.getLoginId(), equipId);
@@ -179,7 +179,7 @@ public class EquipmentInfoController {
     }
 
     @PostMapping(value = "/equip/change")
-    public String changeEquip(Model model, HttpServletRequest request) {
+    public String changeEquip(Model model, HttpServletRequest request) throws InterruptedException {
         String equipId = request.getParameter("equipId");
         String locLatitude = request.getParameter("locLatitude");
         String locLongitude = request.getParameter("locLongitude");
@@ -215,7 +215,7 @@ public class EquipmentInfoController {
      * @return
      */
     @GetMapping(value = "/equip/open_close/{id}")
-    public String openOrCloseEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
+    public String openOrCloseEquip(@PathVariable("id") String equipId, Model model, HttpServletRequest request) throws InterruptedException {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
             equipmentById.setOpen(!equipmentById.isOpen());
@@ -240,7 +240,7 @@ public class EquipmentInfoController {
      * @return
      */
     @GetMapping(value = "/equip/getdata/{id}")
-    public String getData(@PathVariable("id") String equipId, Model model, HttpServletRequest request) {
+    public String getData(@PathVariable("id") String equipId, Model model, HttpServletRequest request) throws InterruptedException {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
             service.getData(equipmentById.getLoginId(), equipmentById.getEquipId() + "");

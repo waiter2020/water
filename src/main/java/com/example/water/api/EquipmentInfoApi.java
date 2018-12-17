@@ -129,7 +129,7 @@ public class EquipmentInfoApi {
      * @return
      */
     @PostMapping(value = "/open_close")
-    public String openOrCloseEquip(@RequestBody Map<String,String> map, HttpServletRequest request) {
+    public String openOrCloseEquip(@RequestBody Map<String,String> map, HttpServletRequest request) throws InterruptedException {
         String equipId = map.get("equipId");
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
@@ -154,7 +154,7 @@ public class EquipmentInfoApi {
      * @return
      */
     @PostMapping(value = "/change_model")
-    public String changeModel(@RequestBody Map<String,String> map, HttpServletRequest request) {
+    public String changeModel(@RequestBody Map<String,String> map, HttpServletRequest request) throws InterruptedException {
         String equipId = map.get("equipId");
         String models = map.get("model");
         int model = Integer.parseInt(models);
@@ -190,7 +190,7 @@ public class EquipmentInfoApi {
      * @return
      */
     @PostMapping(value = "/change_threshold")
-    public String changeThreshold(@RequestBody Map<String,String> map, HttpServletRequest request) {
+    public String changeThreshold(@RequestBody Map<String,String> map, HttpServletRequest request) throws InterruptedException {
         String equipId = map.get("equipId");
         String thresholdTypes = map.get("thresholdType");
         int thresholdType = Integer.parseInt(thresholdTypes);
@@ -212,7 +212,7 @@ public class EquipmentInfoApi {
      * @return
      */
     @PostMapping(value = "/getdata")
-    public String getData(@RequestBody Map<String,String> map, HttpServletRequest request) {
+    public String getData(@RequestBody Map<String,String> map, HttpServletRequest request) throws InterruptedException {
         String equipId = map.get("equipId");
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
@@ -231,7 +231,7 @@ public class EquipmentInfoApi {
      * @return
      */
     @PostMapping(value = "/restart")
-    public String restartEquip(@RequestBody Map<String,String> map, HttpServletRequest request) {
+    public String restartEquip(@RequestBody Map<String,String> map, HttpServletRequest request) throws InterruptedException {
         String equipId = map.get("equipId");
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {

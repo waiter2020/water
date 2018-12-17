@@ -104,8 +104,7 @@ water-app:
 
 
 logging:
-  file: water.log
-  path: /home/centos/logs/
+  file: /home/centos/logs/water.log
   level:
     org.springframework: warn
     com.example.water: trace

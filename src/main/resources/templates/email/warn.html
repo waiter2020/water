@@ -32,7 +32,7 @@
             <td th:text="${message.equipId}"></td>
             <td th:text="${message.locLongitude}"></td>
             <td th:text="${message.locLatitude}"></td>
-            <td th:text="${message.waterUsage}"></td>
+            <td th:text="${#numbers.formatDecimal(message.waterUsage,0,1)}"></td>
             <div th:if="${message.online==true}">
                 <div th:if="${message.isOpen()||message.equipState==1||message.equipState==2}" th:switch="${message.equipState}">
                     <td th:case="0" th:text="正常"></td>
@@ -57,6 +57,7 @@
             <td th:text="${message.lowQuantityOfElectricity==true?'低电量':'正常'}"></td>
         </tbody>
     </table>
+    <br/>
 <h2><a href="#">点击此处</a>查看详情</h2>
 </body>
 </html>

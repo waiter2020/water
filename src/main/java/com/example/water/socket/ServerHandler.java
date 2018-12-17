@@ -59,8 +59,11 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
             case '2':
                 service.respond(ctx.channel());
                 break;
+            case '3':
+                service.login(ctx,msg.substring(1,4));
+                break;
             case '4':
-                service.initDevice(ctx,msg);
+                service.initDevice(ctx,msg.substring(2,5));
 
                 break;
             default:

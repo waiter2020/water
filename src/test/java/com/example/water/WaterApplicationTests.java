@@ -16,6 +16,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 
 import static junit.framework.TestCase.assertTrue;
@@ -45,10 +48,17 @@ public class WaterApplicationTests {
         userDetailsServiceIml.save(byUserName);
 
     }
-
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     @Test
     public void T1() {
-        System.out.println(String.format("%0" + 3 + "d", Integer.parseInt("1") + 1));
+
+        Date endTime = null;
+        try {
+            endTime = simpleDateFormat.parse("2018111517422300093");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(endTime);
     }
     @Test
     public void T2(){

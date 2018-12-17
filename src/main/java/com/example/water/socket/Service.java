@@ -22,7 +22,7 @@ import java.util.Date;
  *
  * @author waiter
  */
-@Async
+
 @org.springframework.stereotype.Service
 @Transactional(rollbackFor = Exception.class)
 public class Service {
@@ -46,15 +46,13 @@ public class Service {
 
     private final String ends = "" + c1 + c2;
 
-    public void initDevice(ChannelHandlerContext ctx, String msg) {
-        String equipId = msg.substring(2, 5);
+    public void login(ChannelHandlerContext ctx, String equipId) throws InterruptedException {
+        Thread.sleep(500);
         log.info("equipId:" + equipId);
         onlineDevices.addDevice(ctx.channel());
         logService.save(new Log(equipId,"连接",new Date()));
         log.info(onlineDevices.getSize() + "");
-
         respond(ctx.channel());
-
         EquipmentInfo equipmentByEquipId = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentByEquipId == null) {
             equipmentByEquipId = new EquipmentInfo();
@@ -78,6 +76,15 @@ public class Service {
 //        }
 
         equipmentInfoService.save(equipmentByEquipId);
+    }
+
+    public void initDevice(ChannelHandlerContext ctx, String equipId) throws InterruptedException {
+        Thread.sleep(500);
+        log.info("equipId:" + equipId);
+
+        respond(ctx.channel());
+
+        EquipmentInfo equipmentByEquipId = equipmentInfoService.getEquipmentByEquipId(equipId);
 
         if (equipmentByEquipId.getLock()) {
             /**
@@ -89,10 +96,7 @@ public class Service {
          * 设置阈值
          */
         setThresholdValue(ctx.channel().id().asLongText(),equipId,equipmentByEquipId.getThresholdValue()+"",equipmentByEquipId.getThresholdType());
-        /**
-         * 设置检漏，模式
-         */
-        setModel(ctx.channel().id().asLongText(),equipId,equipmentByEquipId.getModel());
+
         /**
          * 设置时间
          */
@@ -101,11 +105,16 @@ public class Service {
          * 请求上传数据
          */
         getData(ctx.channel().id().asLongText(),equipId);
+        /**
+         * 设置检漏，模式
+         */
+        setModel(ctx.channel().id().asLongText(),equipId,equipmentByEquipId.getModel());
     }
 
 
 
-    public void logout(Channel channel) {
+    public void logout(Channel channel) throws InterruptedException {
+        Thread.sleep(500);
         EquipmentInfo byLoginId = equipmentInfoService.findByLoginId(channel.id().asLongText());
         if (byLoginId==null){
             return;
@@ -121,7 +130,8 @@ public class Service {
     }
 
 
-    public void respond(Channel channel) {
+    public void respond(Channel channel) throws InterruptedException {
+        Thread.sleep(500);
         EquipmentInfo byLoginId = equipmentInfoService.findByLoginId(channel.id().asLongText());
         if (byLoginId==null){
             return;
@@ -132,7 +142,8 @@ public class Service {
     }
 
 
-    public void setTime(Channel channel, String equipId) {
+    public void setTime(Channel channel, String equipId) throws InterruptedException {
+        Thread.sleep(500);
         Calendar instance = Calendar.getInstance();
 
         String format = simpleDateFormat.format(new Date());
@@ -147,18 +158,26 @@ public class Service {
         channel.writeAndFlush("z" + equipId + "a" + format + ends);
     }
 
-    public void deviceData(Channel channel, String msg) {
+    public void deviceData(Channel channel, String msg) throws InterruptedException {
+        Thread.sleep(500);
+        Calendar instance = Calendar.getInstance();
+        Date endTime = new Date();
         EquipmentInfo byLoginId = equipmentInfoService.findByLoginId(channel.id().asLongText());
         switch (msg.charAt(0)) {
             case '0':
                 logService.save(new Log(byLoginId.getEquipId(),"开始用水",new Date()));
                 byLoginId.setEquipState(0);
                 byLoginId.setOpen(true);
-                try {
-                    byLoginId.setEndStateTime(simpleDateFormat.parse(msg.substring(1, 15)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+
+                instance.set(Integer.parseInt(msg.substring(1,5)),
+                        Integer.parseInt(msg.substring(5,7)),
+                        Integer.parseInt(msg.substring(7,9)),
+                        Integer.parseInt(msg.substring(9,11)),
+                        Integer.parseInt(msg.substring(11,13)),
+                        Integer.parseInt(msg.substring(13,15)));
+                endTime = instance.getTime();
+                byLoginId.setEndStateTime(endTime);
+                logService.save(new Log(byLoginId.getEquipId(),simpleDateFormat.format(endTime),new Date()));
                 break;
             /**
              * 小漏
@@ -177,7 +196,7 @@ public class Service {
                     mailClientService.sendWarnMessage(byLoginId, "漏控仪检测到小漏失");
                     jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId() + "", "漏失提醒", "检测到漏控仪：" + byLoginId.getEquipId() + ";名称：" + byLoginId.getName() + "发生小漏失");
                 }
-                byLoginId.setEndStateTime(new Date());
+                //byLoginId.setEndStateTime(new Date());
                 byLoginId.setEquipState(1);
                 break;
             /**
@@ -197,7 +216,7 @@ public class Service {
                     mailClientService.sendWarnMessage(byLoginId, "漏控仪检测到大漏失");
                     jpushService.sendToAppByFamilyId(byLoginId.getFamily().getId() + "", "漏失提醒", "检测到漏控仪：" + byLoginId.getEquipId() + ";名称：" + byLoginId.getName() + "发生大漏失");
                 }
-                byLoginId.setEndStateTime(new Date());
+                //byLoginId.setEndStateTime(new Date());
                 byLoginId.setEquipState(2);
                 break;
             /**
@@ -211,14 +230,18 @@ public class Service {
                 break;
             case '5':
                 logService.save(new Log(byLoginId.getEquipId(),"停止用水",new Date()));
+                logService.save(new Log(byLoginId.getEquipId(),byLoginId.getEquipState()+"",new Date()));
                 if (0 == byLoginId.getEquipState()) {
                     double volumn = Double.parseDouble(msg.substring(15, 20));
-                    Date endTime = null;
-                    try {
-                        endTime = simpleDateFormat.parse(msg.substring(1, 15));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    instance.set(Integer.parseInt(msg.substring(1,5)),
+                            Integer.parseInt(msg.substring(5,7)),
+                            Integer.parseInt(msg.substring(7,9)),
+                            Integer.parseInt(msg.substring(9,11)),
+                            Integer.parseInt(msg.substring(11,13)),
+                            Integer.parseInt(msg.substring(13,15)));
+                     endTime = instance.getTime();
+
+                    logService.save(new Log(byLoginId.getEquipId(),simpleDateFormat.format(endTime),new Date()));
                     byLoginId.setWaterUsage(byLoginId.getWaterUsage()+volumn/100.0);
                     waterConditionService.saveWaterInfo(byLoginId.getEquipId(), byLoginId.getEndStateTime(), endTime, volumn / 100.0);
                 }
@@ -236,7 +259,8 @@ public class Service {
     /**
      * 开关关水
      */
-    public void openOrClose(String loginId, String equipId, boolean f) {
+    public void openOrClose(String loginId, String equipId, boolean f) throws InterruptedException {
+        Thread.sleep(500);
         Channel device = onlineDevices.getDevice(loginId);
         equipId = String.format("%0" + 3 + "d", Integer.parseInt(equipId) );
         if (f) {
@@ -249,7 +273,8 @@ public class Service {
     /**
      * 漏失重启
      */
-    public void reStart(String loginId, String equipId) {
+    public void reStart(String loginId, String equipId) throws InterruptedException {
+        Thread.sleep(500);
         Channel device = onlineDevices.getDevice(loginId);
         equipId = String.format("%0" + 3 + "d", Integer.parseInt(equipId) );
         device.writeAndFlush("z" + equipId + "q" + ends);
@@ -274,7 +299,8 @@ public class Service {
      * @param value
      * @param type
      */
-    public void setThresholdValue(String loginId, String equipId, String value, int type) {
+    public void setThresholdValue(String loginId, String equipId, String value, int type) throws InterruptedException {
+        Thread.sleep(500);
         equipId = String.format("%0" + 3 + "d", Integer.parseInt(equipId) );
         value = String.format("%0" + 4 + "d", Integer.parseInt(value) );
         Channel device = onlineDevices.getDevice(loginId);
@@ -294,7 +320,8 @@ public class Service {
      * @param equipId
      * @param model
      */
-    public void setModel(String loginId, String equipId,int model){
+    public void setModel(String loginId, String equipId,int model) throws InterruptedException {
+        Thread.sleep(500);
         Channel device = onlineDevices.getDevice(loginId);
         device.writeAndFlush("z"+equipId+"m0"+model+ends);
     }
@@ -304,7 +331,8 @@ public class Service {
      * @param loginId
      * @param equipId
      */
-    public void getData(String loginId, String equipId){
+    public void getData(String loginId, String equipId) throws InterruptedException {
+        Thread.sleep(500);
         Channel device = onlineDevices.getDevice(loginId);
         equipId = String.format("%0" + 3 + "d", Integer.parseInt(equipId) );
         device.writeAndFlush("z"+equipId+"d"+ends);
