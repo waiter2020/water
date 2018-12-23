@@ -129,6 +129,12 @@ public class Service {
         }
     }
 
+    public void reSet(String substring) {
+        EquipmentInfo equipmentByEquipId = equipmentInfoService.getEquipmentByEquipId(substring);
+        equipmentByEquipId.setEquipState(5);
+        equipmentInfoService.save(equipmentByEquipId);
+    }
+
 
     public void respond(Channel channel) throws InterruptedException {
         Thread.sleep(500);

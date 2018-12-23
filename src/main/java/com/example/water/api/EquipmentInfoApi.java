@@ -2,8 +2,10 @@ package com.example.water.api;
 
 import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Family;
+import com.example.water.model.Log;
 import com.example.water.model.User;
 import com.example.water.service.EquipmentInfoService;
+import com.example.water.service.LogService;
 import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.socket.Service;
 import com.example.water.utils.JwtTokenUtil;
@@ -32,6 +34,8 @@ public class EquipmentInfoApi {
     private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
     private EquipmentInfoService equipmentInfoService;
+    @Autowired
+    private LogService logService;
     @Autowired
     private Service service;
 
@@ -217,6 +221,7 @@ public class EquipmentInfoApi {
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
             service.getData(equipmentById.getLoginId(), equipmentById.getEquipId() + "");
+            logService.save(new Log(equipmentById.getEquipId(),"信息上传",new Date()));
         } else {
             return "设备离线";
         }

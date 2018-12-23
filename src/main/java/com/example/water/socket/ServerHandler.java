@@ -54,6 +54,9 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
                 service.deviceData(ctx.channel(),msg.substring(4));
                 break;
             case '1':
+                if (msg.contains("q")){
+                    service.reSet(msg.substring(2,5));
+                }
                 service.respond(ctx.channel());
                 break;
             case '2':

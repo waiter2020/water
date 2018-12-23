@@ -33,8 +33,9 @@ public class IdleStateHandlerInitializer extends ChannelInitializer<Channel> {
     }
 
     public static final class HeartBeatHandle extends ChannelHandlerAdapter {
+        private static char a=0x0D,b=0x0A;
         private static final ByteBuf HEARTBEAT_SEQUENCE = Unpooled.unreleasableBuffer(
-                Unpooled.copiedBuffer("HEARTBEAT", CharsetUtil.UTF_8));
+                Unpooled.copiedBuffer("HEARTBEAT"+a+b, CharsetUtil.UTF_8));
 
         @Override
         public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
