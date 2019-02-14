@@ -49,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/zhong_de/**").access("hasAnyRole('ZHONG_DE')")
                 .antMatchers("/druid/**","/file/**","/file").access("hasRole('ADMIN')")
                 .antMatchers("/user").hasAuthority("ROLE_USER")
                 .antMatchers("/").permitAll()

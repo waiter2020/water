@@ -62,7 +62,7 @@ public class WaterConditionApi {
             page=0;
         }
 
-        Page<WaterCondition> waterInfosByDate = waterConditionService.getWaterInfosByDate(page,equipId, startTime, endTime);
+        Page<WaterCondition> waterInfosByDate = waterConditionService.getWaterInfosByDate(page,equipId, startTime, endTime,20);
         PageBean pageBean = new PageBean();
         pageBean.setTotalPage(waterInfosByDate.getTotalPages());
         pageBean.setTotalCount((int)waterInfosByDate.getTotalElements());

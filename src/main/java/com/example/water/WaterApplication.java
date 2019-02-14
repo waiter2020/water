@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+/**
+ * @author waiter
+ */
 @EnableAsync
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @SpringBootApplication

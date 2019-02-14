@@ -93,7 +93,7 @@ boss:
     count: 2
 worker:
   thread:
-    count: 2
+    count: 20
 so:
   keepalive:  true
   backlog: 100

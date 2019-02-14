@@ -25,6 +25,8 @@ public class WaterConditionService {
     @Autowired
     private WaterConditionDao waterConditionDao;
 
+
+
     public void saveWaterInfo(String watermeterId, Date startDate, Date endDate, double volumn){
         waterConditionDao.save(new WaterCondition(watermeterId,volumn,endDate.getTime()-startDate.getTime(), startDate,endDate));
     }
@@ -33,8 +35,8 @@ public class WaterConditionService {
         Pageable pageable = PageRequest.of(1, 20);
         return DataUtils.createJsonString(waterConditionDao.getWaterConditionsByWatermeterIdAndStartDateAfterAndEndDateBeforeOrderByStartDateDesc(pageable,watermeterId,startTime,endTime));
     }
-    public Page<WaterCondition> getWaterInfosByDate(int page,String watermeterId, Date startTime, Date endTime){
-        Pageable pageable = PageRequest.of(page, 20);
+    public Page<WaterCondition> getWaterInfosByDate(int page,String watermeterId, Date startTime, Date endTime,Integer pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize);
         return waterConditionDao.findAllByWatermeterIdAndAndStartDateAfterAndEndDateBeforeOrderByStartDate(pageable,watermeterId,startTime,endTime);
     }
     public ArrayList<WaterCondition> findAll(){
