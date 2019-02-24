@@ -24,8 +24,8 @@ import java.util.LinkedList;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class WaterApplicationTests {
     @Autowired
     UserDetailsServiceImpl userDetailsServiceIml;
@@ -71,4 +71,9 @@ public class WaterApplicationTests {
         jpushService.sendToAppByFamilyId(18+"","漏失提醒","检测到漏控仪："+"12"+";名称："+"未命名"+"发生大漏失");
     }
 
+    @Test
+    public void T4(){
+        Date date = new Date(1547756125000L+8*60*60*1000);
+        System.out.println(simpleDateFormat.format(date));
+    }
 }

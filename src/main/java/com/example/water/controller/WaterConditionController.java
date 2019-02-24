@@ -71,7 +71,7 @@ public class WaterConditionController extends HttpServlet {
             page=0;
         }
 
-        Page<WaterCondition> waterInfosByDate = waterConditionService.getWaterInfosByDate(page,equipId, startTime, endTime);
+        Page<WaterCondition> waterInfosByDate = waterConditionService.getWaterInfosByDate(page,equipId, startTime, endTime,20);
         logger.info("查询了"+equipId+" 开始时间："+startTime+" 结束时间："+endTime);
         List<WaterCondition> content = waterInfosByDate.getContent();
         model.addAttribute("page",waterInfosByDate);

@@ -86,7 +86,7 @@
                         <td th:text="${#dates.format(waterCondition.startDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${#dates.format(waterCondition.endDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${waterCondition.volumn}"></td>
-                        <td th:text="${waterCondition.timeUse}"></td>
+                        <td th:text="${waterCondition.timeUse/1000}"></td>
                         <!--<td>-->
                         <!--&lt;!&ndash;<a class="btn btn-sm btn-primary" th:href="@{/family/}+${user.id}">编辑</a>&ndash;&gt;-->
                         <!--&lt;!&ndash;<button  th:attr="del_uri=@{/water/}+${equip.equipId}" class="btn btn-sm btn-danger deleteBtn">删除</button>&ndash;&gt;-->
