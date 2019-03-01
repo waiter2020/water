@@ -75,6 +75,8 @@
                         <th>设备编号</th>
                         <th>描述</th>
                         <th>日期</th>
+                        <th>阈值类型</th>
+                        <th>阈值</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -82,7 +84,9 @@
                         <td th:text="${log.equipId}"></td>
                         <td th:text="${log.description}"></td>
                         <td th:text="${#dates.format(log.date, 'yyyy-MM-dd HH:mm:ss')}"></td>
-
+                        <td hidden class="equip " th:id="${log.equipId}" th:utext="${log.equipmentInfo}"></td>
+                        <td th:id="type+${log.equipId}"></td>
+                        <td th:id="value+${log.equipId}"></td>
                         <!--<td>-->
                         <!--&lt;!&ndash;<a class="btn btn-sm btn-primary" th:href="@{/family/}+${user.id}">编辑</a>&ndash;&gt;-->
                         <!--&lt;!&ndash;<button  th:attr="del_uri=@{/water/}+${equip.equipId}" class="btn btn-sm btn-danger deleteBtn">删除</button>&ndash;&gt;-->
@@ -132,6 +136,26 @@
         $("#chancePageForm").attr("action",$(this).attr("del_uri")).submit();
         return false;
     });
+
+</script>
+<script>
+    var equips = $('.equip');
+    console.log(equips);
+    for (var i=0;i<equips.length;i++){
+        var equip = equips[i];
+        var info = JSON.parse(equip.innerText);
+        var $obj = $(equip);
+
+        console.log(info);
+        console.log(info.thresholdType);
+        console.log(info.thresholdValue);
+        if (info.thresholdType==1){
+            $obj.next().html("时间")  ;
+        }else {
+            $obj.next().html("流量") ;
+        }
+        $obj.next().next().html(info.thresholdValue);
+    }
 </script>
 
 </body>

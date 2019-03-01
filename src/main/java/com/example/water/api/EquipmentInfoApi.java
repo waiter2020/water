@@ -9,9 +9,12 @@ import com.example.water.service.LogService;
 import com.example.water.service.UserDetailsServiceImpl;
 import com.example.water.socket.Service;
 import com.example.water.utils.JwtTokenUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,8 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api/equip")
 public class EquipmentInfoApi {
+    @Autowired
+    private ObjectMapper jacksonObjectMapper;
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceIml;
     @Autowired
@@ -216,12 +221,13 @@ public class EquipmentInfoApi {
      * @return
      */
     @PostMapping(value = "/getdata")
-    public String getData(@RequestBody Map<String,String> map, HttpServletRequest request) throws InterruptedException {
+    public String getData(@RequestBody Map<String,String> map, HttpServletRequest request) throws InterruptedException, JsonProcessingException {
         String equipId = map.get("equipId");
         EquipmentInfo equipmentById = equipmentInfoService.getEquipmentByEquipId(equipId);
         if (equipmentById.isOnline()) {
             service.getData(equipmentById.getLoginId(), equipmentById.getEquipId() + "");
-            logService.save(new Log(equipmentById.getEquipId(),"信息上传",new Date()));
+
+            logService.save(new Log(equipmentById.getEquipId(),"信息上传",new Date(),jacksonObjectMapper.writeValueAsString(equipmentById)));
         } else {
             return "设备离线";
         }

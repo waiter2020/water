@@ -63,6 +63,7 @@ public class EquipInfoController {
         }
         return waterConditionService.getWaterInfosByDate(page,id, startTime,endTime,pageSize);
     }
+
     //只需要加上下面这段即可，注意不能忘记注解
     @InitBinder
     public void initBinder(WebDataBinder binder, WebRequest request) {

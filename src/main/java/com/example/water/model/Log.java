@@ -2,10 +2,7 @@ package com.example.water.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -22,12 +19,21 @@ public class Log {
     private String equipId;
     private String description;
     private Date date;
+    @Column(length = 2000)
+    private String equipmentInfo;
     public Log(){}
 
     public Log(String equipId, String description, Date date) {
         this.equipId = equipId;
         this.description = description;
         this.date = date;
+    }
+
+    public Log(String equipId, String description, Date date, String equipmentInfo) {
+        this.equipId = equipId;
+        this.description = description;
+        this.date = date;
+        this.equipmentInfo = equipmentInfo;
     }
 
     @Override

@@ -4,6 +4,8 @@ import com.example.water.WaterApplication;
 import com.example.water.model.EquipmentInfo;
 import com.example.water.model.Log;
 import com.example.water.service.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
@@ -27,6 +29,8 @@ import java.util.Date;
 @Transactional(rollbackFor = Exception.class)
 public class Service {
     @Autowired
+    private ObjectMapper jacksonObjectMapper;
+    @Autowired
     private OnlineDevices onlineDevices;
     @Autowired
     private EquipmentInfoService equipmentInfoService;
@@ -46,14 +50,15 @@ public class Service {
 
     private final String ends = "" + c1 + c2;
 
-    public void login(ChannelHandlerContext ctx, String equipId) throws InterruptedException {
+    public void login(ChannelHandlerContext ctx, String equipId) throws InterruptedException, JsonProcessingException {
         Thread.sleep(500);
         log.info("equipId:" + equipId);
         onlineDevices.addDevice(ctx.channel());
-        logService.save(new Log(equipId,"连接",new Date()));
+        EquipmentInfo equipmentByEquipId = equipmentInfoService.getEquipmentByEquipId(equipId);
+        logService.save(new Log(equipId,"连接",new Date(),jacksonObjectMapper.writeValueAsString(equipmentByEquipId)));
         log.info(onlineDevices.getSize() + "");
         respond(ctx.channel());
-        EquipmentInfo equipmentByEquipId = equipmentInfoService.getEquipmentByEquipId(equipId);
+
         if (equipmentByEquipId == null) {
             equipmentByEquipId = new EquipmentInfo();
             equipmentByEquipId.setName("未命名");
@@ -113,7 +118,7 @@ public class Service {
 
 
 
-    public void logout(Channel channel) throws InterruptedException {
+    public void logout(Channel channel) throws InterruptedException, JsonProcessingException {
         Thread.sleep(500);
         EquipmentInfo byLoginId = equipmentInfoService.findByLoginId(channel.id().asLongText());
         if (byLoginId==null){
@@ -121,7 +126,7 @@ public class Service {
         }
         byLoginId.setLoginId(null);
         byLoginId.setOnline(false);
-        logService.save(new Log(byLoginId.getEquipId(),"断开连接",new Date()));
+        logService.save(new Log(byLoginId.getEquipId(),"断开连接",new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
         onlineDevices.removeDevice(channel.id().asLongText());
         equipmentInfoService.save(byLoginId);
         if (byLoginId.getFamily()!=null) {
@@ -164,14 +169,14 @@ public class Service {
         channel.writeAndFlush("z" + equipId + "a" + format + ends);
     }
 
-    public void deviceData(Channel channel, String msg) throws InterruptedException {
+    public void deviceData(Channel channel, String msg) throws InterruptedException, JsonProcessingException {
         Thread.sleep(500);
         Calendar instance = Calendar.getInstance();
         Date endTime = new Date();
         EquipmentInfo byLoginId = equipmentInfoService.findByLoginId(channel.id().asLongText());
         switch (msg.charAt(0)) {
             case '0':
-                logService.save(new Log(byLoginId.getEquipId(),"开始用水",new Date()));
+                logService.save(new Log(byLoginId.getEquipId(),"开始用水",new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
                 byLoginId.setEquipState(0);
                 byLoginId.setOpen(true);
 
@@ -183,13 +188,13 @@ public class Service {
                         Integer.parseInt(msg.substring(13,15)));
                 endTime = instance.getTime();
                 byLoginId.setEndStateTime(endTime);
-                logService.save(new Log(byLoginId.getEquipId(),simpleDateFormat.format(endTime),new Date()));
+                logService.save(new Log(byLoginId.getEquipId(),simpleDateFormat.format(endTime),new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
                 break;
             /**
              * 小漏
              */
             case '1':
-                logService.save(new Log(byLoginId.getEquipId(),"小漏失",new Date()));
+                logService.save(new Log(byLoginId.getEquipId(),"小漏失",new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
 
                 //byLoginId.setOpen(false);
                 //openOrClose(byLoginId.getLoginId(),byLoginId.getEquipId()+"",byLoginId.isOpen());
@@ -209,7 +214,7 @@ public class Service {
              * 大漏
              */
             case '2':
-                logService.save(new Log(byLoginId.getEquipId(),"大漏失",new Date()));
+                logService.save(new Log(byLoginId.getEquipId(),"大漏失",new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
 
                 //byLoginId.setOpen(false);
                 //openOrClose(byLoginId.getLoginId(),byLoginId.getEquipId()+"",byLoginId.isOpen());
@@ -229,14 +234,14 @@ public class Service {
              * 低电量
              */
             case '4':
-                logService.save(new Log(byLoginId.getEquipId(),"低电量",new Date()));
+                logService.save(new Log(byLoginId.getEquipId(),"低电量",new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
                 byLoginId.setLowQuantityOfElectricity(true);
                 byLoginId.setEndStateTime(new Date());
                 mailClientService.sendWarnMessage(byLoginId,"漏控仪电量低");
                 break;
             case '5':
-                logService.save(new Log(byLoginId.getEquipId(),"停止用水",new Date()));
-                logService.save(new Log(byLoginId.getEquipId(),byLoginId.getEquipState()+"",new Date()));
+                logService.save(new Log(byLoginId.getEquipId(),"停止用水",new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
+                logService.save(new Log(byLoginId.getEquipId(),byLoginId.getEquipState()+"",new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
                 if (0 == byLoginId.getEquipState()) {
                     double volumn = Double.parseDouble(msg.substring(15, 20));
                     instance.set(Integer.parseInt(msg.substring(1,5)),
@@ -247,7 +252,7 @@ public class Service {
                             Integer.parseInt(msg.substring(13,15)));
                      endTime = instance.getTime();
 
-                    logService.save(new Log(byLoginId.getEquipId(),simpleDateFormat.format(endTime),new Date()));
+                    logService.save(new Log(byLoginId.getEquipId(),simpleDateFormat.format(endTime),new Date(),jacksonObjectMapper.writeValueAsString(byLoginId)));
                     byLoginId.setWaterUsage(byLoginId.getWaterUsage()+volumn/100.0);
                     waterConditionService.saveWaterInfo(byLoginId.getEquipId(), byLoginId.getEndStateTime(), endTime, volumn / 100.0);
                 }

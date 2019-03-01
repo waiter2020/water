@@ -56,7 +56,7 @@ public class LogController {
         String endTimes=format0.format(endTime);
         model.addAttribute("startTimes",startTimes);
         model.addAttribute("endTimes",endTimes);
-        model.addAttribute("equipId",Integer.parseInt(equipId));
+        model.addAttribute("equipId",equipId);
         return get(model,request);
     }
 
